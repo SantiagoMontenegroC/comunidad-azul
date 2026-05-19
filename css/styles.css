@@ -157,6 +157,14 @@ ul {
 .btn--whatsapp {
   background: #25d366;
   color: var(--blanco);
+  text-decoration: none;
+}
+
+.btn--whatsapp .icon-whatsapp {
+  display: block;
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
 }
 
 /* Formularios */

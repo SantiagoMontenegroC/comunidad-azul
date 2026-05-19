@@ -94,9 +94,14 @@
   height: 32px;
 }
 
-.btn--whatsapp .icon-whatsapp {
-  width: 22px;
-  height: 22px;
+.contacto-item__value a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.contacto-item__value a:hover {
+  color: var(--azul-medio);
+  text-decoration: underline;
 }
 
 /* Footer (Stitch) */
