@@ -91,9 +91,50 @@ function initHeroButtons() {
   });
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  initSupabase();
+/** Indicador de conexión con Supabase (reportes) */
+function actualizarIndicadorBD(conectado) {
+  const ind = document.getElementById('db-indicator');
+  if (!ind) return;
+
+  const label = ind.querySelector('.db-indicator__label');
+  ind.classList.toggle('db-indicator--offline', !conectado);
+  if (label) {
+    label.textContent = conectado
+      ? 'Conectado a la base de datos'
+      : 'Sin conexión a la base de datos';
+  }
+}
+
+/** Sincroniza tarjetas del hero con datos reales de Supabase */
+async function actualizarEstadisticasHero() {
+  const puntosEl = document.getElementById('hero-puntos-count');
+  const reportesEl = document.getElementById('hero-reportes-count');
+  const badgeEl = document.getElementById('hero-reportes-badge');
+
+  const { data: puntos, error: errPuntos } = await cargarPuntosVenta();
+  if (!errPuntos && puntosEl && puntos) {
+    puntosEl.textContent = String(puntos.length).padStart(2, '0');
+  }
+
+  const { data: reportes, error: errReportes } = await cargarReportes();
+  if (!errReportes && reportesEl && reportes) {
+    const enSeguimiento = reportes.filter(
+      (r) => !(r.estado || '').toLowerCase().includes('resuelto')
+    ).length;
+    reportesEl.textContent = String(enSeguimiento).padStart(2, '0');
+    if (badgeEl) {
+      badgeEl.textContent = enSeguimiento === 0 ? 'Sin pendientes' : 'En curso';
+    }
+  }
+}
+
+document.addEventListener('DOMContentLoaded', async () => {
+  const cliente = initSupabase();
+  actualizarIndicadorBD(!!cliente);
   initNavbar();
   initFadeIn();
   initHeroButtons();
+  if (cliente) {
+    await actualizarEstadisticasHero();
+  }
 });

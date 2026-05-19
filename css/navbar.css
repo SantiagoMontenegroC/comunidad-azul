@@ -4,7 +4,7 @@
 
 .navbar {
   position: fixed;
-  top: 0;
+  top: var(--aviso-height, 36px);
   left: 0;
   right: 0;
   z-index: 1000;

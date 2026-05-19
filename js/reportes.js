@@ -72,10 +72,12 @@ async function actualizarFeedReportes() {
 
   if (error) {
     listaReportes.innerHTML = `<p class="puntos-error">Error: ${escaparHtml(error.message)}</p>`;
+    actualizarIndicadorBD(false);
     return;
   }
 
   renderizarReportes(data);
+  actualizarIndicadorBD(true);
 }
 
 /** Muestra mensaje de éxito o error en el formulario */
@@ -118,9 +120,12 @@ async function manejarEnvioReporte(e) {
     return;
   }
 
-  mostrarMensajeReporte('success', '¡Reporte enviado! La comunidad fue notificada.');
+  mostrarMensajeReporte('success', '¡Reporte registrado! Aparecerá en el feed de la comunidad.');
   formReporte.reset();
   await actualizarFeedReportes();
+  if (typeof actualizarEstadisticasHero === 'function') {
+    await actualizarEstadisticasHero();
+  }
 }
 
 /** Inicialización de reportes */

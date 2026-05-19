@@ -1,0 +1,34 @@
+---
+description: Desplegar a producción (Netlify) tras cada tarea completada
+alwaysApply: true
+---
+
+# Despliegue automático a producción
+
+Este proyecto se publica en **Netlify** conectado a GitHub (`main`). Cada push despliega producción.
+
+## Obligatorio al terminar cualquier cambio de código o contenido
+
+1. Verificar `git status` en `comunidad-azul`.
+2. Si hay cambios: `git add` solo archivos del proyecto, commit en **español** (sin Co-authored-by).
+3. `git push origin main`.
+4. Confirmar al usuario la URL de producción: https://github.com/SantiagoMontenegroC/comunidad-azul (repo) y el sitio Netlify si se conoce.
+
+## Comandos (PowerShell, carpeta del proyecto)
+
+```powershell
+cd "C:\Users\Santiago Montenegro\comunidad-azul"
+powershell -ExecutionPolicy Bypass -File .\desplegar.ps1
+```
+
+O: `.\desplegar.bat`
+
+## No hacer
+
+- No omitir el push por “es un cambio pequeño”.
+- No pedir permiso para desplegar salvo que el usuario diga explícitamente que **no** despliegue en esa tarea.
+- No usar `git config` global salvo que el usuario lo pida.
+
+## Si el push falla
+
+Informar el error y los pasos (auth GitHub, `gh auth login`, etc.).

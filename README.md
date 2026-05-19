@@ -139,4 +139,4 @@ O usa la extensión **Live Server** de VS Code/Cursor.
 - Tipografías: Raleway, Nunito (Google Fonts)
 - Backend: Supabase
 
-**Barrio Divino Niño 1 — Colombia © 2025**
+**Barrio Divino Niño 1 — Colombia © 2026** — Proyecto educativo universitario.

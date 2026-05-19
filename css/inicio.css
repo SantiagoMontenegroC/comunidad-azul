@@ -3,7 +3,7 @@
    ============================================ */
 
 #inicio {
-  padding-top: var(--nav-height);
+  padding-top: calc(var(--nav-height) + var(--aviso-height));
 }
 
 .hero {
@@ -295,6 +295,21 @@
   margin-left: 4px;
 }
 
+.stat-card__note {
+  display: block;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: var(--texto-suave);
+  margin-top: 2px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.hero-info__subtitle {
+  margin: 0;
+  text-align: left;
+}
+
 .stat-card__badge {
   display: inline-flex;
   align-items: center;
@@ -411,6 +426,10 @@
 
   .hero-info__grid {
     grid-template-columns: 1fr;
+  }
+
+  .hero-info__subtitle {
+    text-align: center;
   }
 }
 
