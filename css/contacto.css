@@ -90,15 +90,7 @@
   position: relative;
   background: var(--azul-profundo);
   color: var(--blanco);
-  padding-top: 80px;
-}
-
-.site-footer .waves-top {
-  top: 0;
-}
-
-.site-footer .waves-top .shape-fill {
-  fill: var(--azul-claro);
+  padding-top: 3rem;
 }
 
 .footer__grid {
