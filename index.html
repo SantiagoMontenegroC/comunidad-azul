@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Comunidad Azul — Plataforma comunitaria sobre el agua en el Barrio Divino Niño 1, Colombia." />
+  <title>Comunidad Azul — Barrio Divino Niño 1</title>
+
+  <!-- Tipografía: Raleway (títulos) + Nunito (cuerpo) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600&family=Raleway:wght@700;800&display=swap" rel="stylesheet" />
+
+  <!-- Iconos Material Symbols (diseño Stitch) -->
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+
+  <!-- Estilos del proyecto -->
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/navbar.css" />
+  <link rel="stylesheet" href="css/inicio.css" />
+  <link rel="stylesheet" href="css/puntos-venta.css" />
+  <link rel="stylesheet" href="css/reportes.css" />
+  <link rel="stylesheet" href="css/contacto.css" />
+</head>
+<body>
+
+  <!-- ========== 1. NAVBAR FIJA ========== -->
+  <header class="navbar" id="navbar" role="banner">
+    <div class="navbar__inner">
+      <a href="#inicio" class="navbar__logo" aria-label="Comunidad Azul - Inicio">
+        <span class="material-symbols-outlined material-symbols-outlined--fill navbar__logo-icon">water_drop</span>
+        Comunidad Azul
+      </a>
+
+      <button class="navbar__toggle" id="nav-toggle" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="nav-menu">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="navbar__menu" id="nav-menu" aria-label="Navegación principal">
+        <a href="#inicio" class="navbar__link navbar__link--active">Inicio</a>
+        <a href="#puntos-venta" class="navbar__link">Puntos de Venta</a>
+        <a href="#reportes" class="navbar__link">Reportes</a>
+        <a href="#contacto" class="navbar__link">Contáctanos</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ========== 2. INICIO (HERO) — Diseño Stitch integrado ========== -->
+  <section id="inicio" aria-label="Inicio">
+    <div class="hero">
+      <!-- Fondo con imagen y gradiente -->
+      <div class="hero__bg" aria-hidden="true">
+        <!-- Reemplaza src por img/hero-agua.jpg cuando tengas tu imagen local -->
+        <img
+          class="hero__bg-image"
+          src="https://lh3.googleusercontent.com/aida-public/AB6AXuB2Tw_2OvNYc9hiGnk67t4aHnIfL7qKOiet2s9E6eVXn4SuLouIrCzbwEQY29HHEQZOY3d4y1LsSXeIM8NirNYkCcUBZX8-EIjTn6Xi8zSX1MWnwHTYMHWrQm1i9x_ek-RU6aucGRMEOSvs854y-k_xwPLSI1MwBK92gWOiaC6fSWDEoXncVQyUOX0Y2ef7-k-iecShrRcaLEdGRr25KSGs6PhpzettduCsoohrtNZnS4cddEdhbtCct36iBbOrhbnw9X3o8pUfmQ"
+          alt=""
+        />
+        <div class="hero__bg-overlay"></div>
+      </div>
+
+      <!-- Olas animadas (borde inferior del hero) -->
+      <div class="hero__waves" aria-hidden="true">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+          <path class="hero__wave-layer shape-fill" d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z" opacity=".25"></path>
+          <path class="hero__wave-layer hero__wave-layer--delay shape-fill" d="M0,0V15.81C13,36.92,27.64,56.86,47.69,72.05,99.41,111.27,165,111,224.58,91.58c31.15-10.15,60.09-26.07,89.67-39.8,40.92-19,84.73-46,130.83-49.67,36.26-2.85,70.9,9.42,98.6,31.56,31.77,25.39,62.32,62,103.63,73,40.44,10.79,81.35-6.69,119.13-24.28s75.16-39,116.92-43.05c59.73-5.85,113.28,22.88,168.9,38.84,30.2,8.66,59,6.17,87.09-7.5,22.43-10.89,48-26.93,60.65-49.24V0Z" opacity=".5"></path>
+          <path class="shape-fill" d="M0,0V5.63C149.93,59,314.09,71.32,475.83,42.57c43-7.64,84.23-20.12,130.83-26.46,49.4-6.84,98.6-2.85,146.06,9.42,37.06,9.35,72.64,25.39,108.12,38.84,35.48,13.45,71.06,24.28,108.12,28.13,36.26,3.85,72.64-2.85,108.12-13.45,35.48-10.6,71.06-26.93,108.12-38.84,37.06-11.91,72.64-21.28,108.12-28.13,35.48-6.85,71.06-9.42,108.12-7.64,37.06,1.78,72.64,9.42,108.12,22.87,35.48,13.45,71.06,32.38,108.12,49.24,37.06,16.86,72.64,31.56,108.12,42.57,35.48,11.01,71.06,18.65,108.12,22.87,37.06,4.22,72.64,4.22,108.12,0,35.48-4.22,71.06-13.45,108.12-22.87,37.06-9.42,72.64-21.28,108.12-28.13,35.48-6.85,71.06-9.42,108.12-7.64,37.06,1.78,72.64,9.42,108.12,22.87C1034.91,95.07,1114.09,80.37,1200,52.47V0Z"></path>
+        </svg>
+      </div>
+
+      <div class="hero__content">
+        <!-- Columna izquierda: texto principal -->
+        <div class="hero__text-col">
+          <span class="hero__badge">
+            <span class="material-symbols-outlined">water_drop</span>
+            Proyecto Social Divino Niño 1
+          </span>
+          <h1 class="hero__title">
+            El Agua es un <span>Derecho</span>,<br />no un Privilegio
+          </h1>
+          <p class="hero__text">
+            Unidos por el suministro digno en el Barrio Divino Niño 1. Facilitamos el acceso a información vital y gestión colectiva de nuestros recursos hídricos.
+          </p>
+          <div class="hero__actions">
+            <button type="button" class="btn btn--primary" id="btn-estado-suministro">
+              Ver Estado del Suministro
+              <span class="material-symbols-outlined">analytics</span>
+            </button>
+            <button type="button" class="btn btn--outline" id="btn-conoce-proyecto">
+              Conoce el Proyecto
+            </button>
+          </div>
+        </div>
+
+        <!-- Columna derecha: estadísticas (bento Stitch) -->
+        <div class="hero__stats">
+          <div class="hero__stats-accent" aria-hidden="true"></div>
+          <article class="stat-card glass-card">
+            <div class="stat-card__icon stat-card__icon--alert">
+              <span class="material-symbols-outlined material-symbols-outlined--fill">timer</span>
+            </div>
+            <p class="stat-card__label">Días sin agua</p>
+            <p class="stat-card__value">03</p>
+          </article>
+          <article class="stat-card glass-card">
+            <div class="stat-card__icon stat-card__icon--teal">
+              <span class="material-symbols-outlined material-symbols-outlined--fill">water_full</span>
+            </div>
+            <p class="stat-card__label">Tanques disponibles</p>
+            <p class="stat-card__value">12</p>
+          </article>
+          <article class="stat-card glass-card">
+            <div style="display:flex;align-items:center;gap:16px;">
+              <div class="stat-card__icon stat-card__icon--blue">
+                <span class="material-symbols-outlined material-symbols-outlined--fill">campaign</span>
+              </div>
+              <div>
+                <p class="stat-card__label">Reportes activos</p>
+                <p class="stat-card__value" style="font-size:1.25rem;">24 Casos hoy</p>
+              </div>
+            </div>
+            <span class="stat-card__tag">En curso</span>
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bloque informativo debajo del hero (Stitch) -->
+    <div class="hero-info">
+      <div class="container">
+        <div class="hero-info__header fade-in">
+          <div>
+            <h2 class="section__title">Acción Comunitaria Transparente</h2>
+            <p class="section__subtitle" style="margin:0;text-align:left;">
+              Monitoreamos cada gota para asegurar que llegue a cada hogar.
+            </p>
+          </div>
+          <a href="#puntos-venta" class="hero-info__link">
+            Explorar mapa completo
+            <span class="material-symbols-outlined">arrow_forward</span>
+          </a>
+        </div>
+        <div class="hero-info__grid">
+          <article class="feature-card fade-in">
+            <div class="feature-card__img img-placeholder">
+              <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuBURJtqbg0JzbqIf31k75y0KIrYXjfhY_EFMVRA_dYh94HvqY-75jpI_zdmATzN_Z7otZ0shRyQxl7TJ4ETf8iCYsHjtst9eDm83qxenQP_0Rt5azec3X2YDFTLdIsswCp0XN3xQgSDvoM4OMi7W2vDxYE9v6U_QhBB9y4DBvQo7h-PU6kWwplo_UnEznrYeG8dm2FMThthGO0l1dc1ttGRBReOjWhOvoBOeggS8nF-Viy9Ee5kuuDJRMImT9zTu3pR05zC_oEm_g" alt="Mapa de suministro del barrio" style="width:100%;height:100%;object-fit:cover;border-radius:8px;" onerror="this.style.display='none'" />
+            </div>
+            <h4>Mapa de Suministro</h4>
+            <p>Ubica los puntos de distribución activos y el estado de las tuberías principales.</p>
+            <button type="button" class="feature-card__btn" data-scroll="#puntos-venta">Consultar Mapa</button>
+          </article>
+          <article class="feature-card fade-in">
+            <div class="feature-card__img img-placeholder">
+              <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuCcQE0mIP5DJMR8-YVkkudw-J3jBiQia7puOEqRyHsdDIzPrbDGFCtHWUzehs9sfhwdt3FbyttAwQ_PU_m1ZGJMvlB9KXiQXqcPAhNh88qI6WvvQIdYarc8YkLvGKLhTSBpF9Gx_JBIv1XkRTlZLXxweyBYbD-ai0Uu2uAi-1l149k1OakJjUGOtEQ2ASJ4yEZeiO7KhxJoC8zM8DijaB7EUgSJQtA5Te7NXOk3yw3S_PmvQtmtPKU3AUM1tZKlQGzM0Mp3aZoxjQ" alt="Acción comunitaria" style="width:100%;height:100%;object-fit:cover;border-radius:8px;" onerror="this.style.display='none'" />
+            </div>
+            <h4>Gestión de Reportes</h4>
+            <p>¿Fugas o falta de presión? Reporta incidentes y sigue el proceso de resolución.</p>
+            <button type="button" class="feature-card__btn" data-scroll="#reportes">Nuevo Reporte</button>
+          </article>
+          <article class="feature-card fade-in">
+            <div class="feature-card__img img-placeholder">
+              <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuCFYcpw7t77VJeA8rCsU6SD1el8rFPDny6BkUUcdOEydRrBBZoSBsXgsUvJNci3wwSnV6x1YlhJ3_7NniEvhGnIYLUulzo1_Bn5cahCsEsF1D_8F3jc-IM7rHsKjii4WqLaNGjUBHS3eSYhUJYOfG4ITfGRgye1hUhC42EYbQ3A6QV7VNIHSbJPNbTRGTgS97gqxkCu98_0a7Ipiu89SB1WAYmHG355zZ2o_x1r0Ih5Z1-MxthfxzeGBdHvZdNKf9qeozoNlK50tQ" alt="Panel de transparencia" style="width:100%;height:100%;object-fit:cover;border-radius:8px;" onerror="this.style.display='none'" />
+            </div>
+            <h4>Panel de Transparencia</h4>
+            <p>Accede a estadísticas de uso y donaciones para el mantenimiento del sistema.</p>
+            <button type="button" class="feature-card__btn" data-scroll="#reportes">Ver Datos</button>
+          </article>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== 3. PUNTOS DE VENTA ========== -->
+  <section id="puntos-venta" class="section" aria-label="Puntos de venta">
+    <div class="container">
+      <header class="section__header fade-in">
+        <h2 class="section__title">Puntos de Venta de Agua Potable</h2>
+        <p class="section__subtitle">Encuentra el punto más cercano a tu hogar</p>
+      </header>
+      <!-- Grid cargado dinámicamente desde Supabase -->
+      <div id="puntos-grid" class="puntos-grid" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <!-- ========== 4. REPORTES ========== -->
+  <section id="reportes" class="section" aria-label="Reportes">
+    <div class="container">
+      <header class="section__header fade-in">
+        <h2 class="section__title">Reportes de la Comunidad</h2>
+        <p class="section__subtitle">Reporta problemas y consulta el estado de la red hídrica</p>
+      </header>
+
+      <div class="reportes-layout">
+        <!-- PARTE A: Formulario -->
+        <div class="reportes-form-card glass-card fade-in">
+          <h3 class="reportes-card__title">
+            <span class="material-symbols-outlined">add_alert</span>
+            Reportar Incidencia
+          </h3>
+          <form id="form-reporte" novalidate>
+            <div class="form-group">
+              <label for="reporte-nombre">Nombre completo *</label>
+              <input type="text" id="reporte-nombre" name="nombre" required placeholder="Tu nombre" />
+            </div>
+            <div class="form-group">
+              <label for="reporte-sector">Sector del barrio</label>
+              <input type="text" id="reporte-sector" name="sector" placeholder="Ej: Sector Norte, Bloque 4" />
+            </div>
+            <div class="form-group">
+              <label for="reporte-tipo">Tipo de problema *</label>
+              <select id="reporte-tipo" name="tipo" required>
+                <option value="">Selecciona una opción</option>
+                <option value="Falta de agua">Falta de agua</option>
+                <option value="Tubería dañada">Tubería dañada</option>
+                <option value="Agua contaminada">Agua contaminada</option>
+                <option value="Otro">Otro</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="reporte-descripcion">Descripción del problema *</label>
+              <textarea id="reporte-descripcion" name="descripcion" rows="4" required placeholder="Describe brevemente lo que ocurre..."></textarea>
+            </div>
+            <button type="submit" class="btn btn--secondary" style="width:100%;">
+              <span class="material-symbols-outlined">send</span>
+              Enviar Reporte
+            </button>
+            <div id="msg-reporte" class="form-message" role="status" aria-live="polite"></div>
+          </form>
+        </div>
+
+        <!-- PARTE B: Feed en tiempo real -->
+        <div class="reportes-feed-card glass-card fade-in">
+          <div class="reportes-feed-header">
+            <h3 class="reportes-card__title">
+              <span class="material-symbols-outlined">history</span>
+              Actividad Reciente
+            </h3>
+            <span class="db-indicator" title="Conexión activa con Supabase">
+              <span class="db-indicator__dot" aria-hidden="true"></span>
+              Conectado a Base de Datos
+            </span>
+          </div>
+          <div id="reportes-list" class="reportes-list" aria-live="polite"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== 5. CONTÁCTANOS ========== -->
+  <section id="contacto" class="section" aria-label="Contacto">
+    <div class="container">
+      <header class="section__header fade-in">
+        <h2 class="section__title">Contáctanos</h2>
+        <p class="section__subtitle">Estamos aquí para escucharte y trabajar de la mano</p>
+      </header>
+
+      <div class="contacto-layout">
+        <!-- Izquierda: información -->
+        <div class="contacto-info fade-in">
+          <h3>Hablemos</h3>
+          <p>Comunícate con la junta comunitaria del Barrio Divino Niño 1 para consultas, emergencias o voluntariado.</p>
+
+          <div class="contacto-item">
+            <div class="contacto-item__icon">
+              <span class="material-symbols-outlined">call</span>
+            </div>
+            <div>
+              <p class="contacto-item__label">Teléfono</p>
+              <p class="contacto-item__value">+57 300 123 4567</p>
+            </div>
+          </div>
+
+          <div class="contacto-item">
+            <div class="contacto-item__icon">
+              <span class="material-symbols-outlined">mail</span>
+            </div>
+            <div>
+              <p class="contacto-item__label">Correo</p>
+              <p class="contacto-item__value">contacto@comunidadazul.co</p>
+            </div>
+          </div>
+
+          <div class="contacto-item">
+            <div class="contacto-item__icon">
+              <span class="material-symbols-outlined">location_on</span>
+            </div>
+            <div>
+              <p class="contacto-item__label">Dirección</p>
+              <p class="contacto-item__value">Calle Principal #45-22, Barrio Divino Niño 1</p>
+            </div>
+          </div>
+
+          <a href="https://wa.me/573001234567" class="btn btn--whatsapp" target="_blank" rel="noopener noreferrer">
+            <span class="material-symbols-outlined">chat</span>
+            Escríbenos por WhatsApp
+          </a>
+        </div>
+
+        <!-- Derecha: formulario → Supabase -->
+        <div class="contacto-form-card glass-card fade-in">
+          <h3 style="margin-bottom:24px;">Envíanos un Mensaje</h3>
+          <form id="form-contacto" novalidate>
+            <div class="form-group">
+              <label for="contacto-nombre">Nombre</label>
+              <input type="text" id="contacto-nombre" name="nombre" required placeholder="Tu nombre" />
+            </div>
+            <div class="form-group">
+              <label for="contacto-email">Correo electrónico</label>
+              <input type="email" id="contacto-email" name="email" required placeholder="email@ejemplo.com" />
+            </div>
+            <div class="form-group">
+              <label for="contacto-mensaje">Mensaje</label>
+              <textarea id="contacto-mensaje" name="mensaje" rows="4" required placeholder="¿Cómo podemos ayudarte?"></textarea>
+            </div>
+            <button type="submit" class="btn btn--secondary" style="width:100%;">Enviar Mensaje</button>
+            <div id="msg-contacto" class="form-message" role="status" aria-live="polite"></div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== 6. FOOTER ========== -->
+  <footer class="site-footer" role="contentinfo">
+  <!-- Patrón de olas superior -->
+  <div class="waves-top" aria-hidden="true">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none" class="wave-animate">
+      <path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z" class="shape-fill"></path>
+    </svg>
+  </div>
+
+  <div class="container">
+    <div class="footer__grid">
+      <div>
+        <div class="footer__logo">
+          <span class="material-symbols-outlined material-symbols-outlined--fill">water_drop</span>
+          Comunidad Azul
+        </div>
+        <p class="footer__tagline">Juntos por el agua de nuestro barrio</p>
+      </div>
+      <div>
+        <h4 class="footer__heading">Enlaces Rápidos</h4>
+        <ul class="footer__links">
+          <li><a href="#inicio">Inicio</a></li>
+          <li><a href="#puntos-venta">Puntos de Venta</a></li>
+          <li><a href="#reportes">Reportes</a></li>
+          <li><a href="#contacto">Contáctanos</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="footer__heading">Emergencias</h4>
+        <ul class="footer__links">
+          <li><a href="tel:+573001234567">+57 300 123 4567</a></li>
+          <li><a href="mailto:reportes@comunidadazul.org">reportes@comunidadazul.org</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <p>Barrio Divino Niño 1 — Colombia © 2025</p>
+    </div>
+  </div>
+  </footer>
+
+  <!-- Botón flotante WhatsApp -->
+  <a href="https://wa.me/573001234567" class="whatsapp-float" target="_blank" rel="noopener noreferrer" aria-label="Contactar por WhatsApp">
+    <span class="material-symbols-outlined">chat</span>
+  </a>
+
+  <!-- Supabase JS (CDN) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="js/supabase.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/puntos-venta.js"></script>
+  <script src="js/reportes.js"></script>
+  <script src="js/contacto.js"></script>
+</body>
+</html>

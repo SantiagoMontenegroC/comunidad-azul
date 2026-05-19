@@ -1,0 +1,342 @@
+/* ============================================
+   Sección INICIO (Hero) — basado en diseño Stitch
+   ============================================ */
+
+#inicio {
+  padding-top: var(--nav-height);
+}
+
+.hero {
+  position: relative;
+  min-height: 90vh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+/* Fondo con imagen y gradiente (Stitch) */
+.hero__bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.hero__bg-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hero__bg-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    rgba(10, 42, 94, 0.85),
+    rgba(10, 42, 94, 0.55)
+  );
+  z-index: 1;
+}
+
+/* Olas animadas en la parte inferior del hero */
+.hero__waves {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 2;
+  line-height: 0;
+}
+
+.hero__waves svg {
+  display: block;
+  width: calc(100% + 1.3px);
+  height: 80px;
+}
+
+.hero__waves .shape-fill {
+  fill: var(--azul-claro);
+}
+
+.hero__wave-layer {
+  animation: heroWave 6s ease-in-out infinite alternate;
+}
+
+.hero__wave-layer--delay {
+  animation-delay: -3s;
+  opacity: 0.7;
+}
+
+@keyframes heroWave {
+  0% { transform: translateX(0) translateY(0); }
+  100% { transform: translateX(-30px) translateY(4px); }
+}
+
+.hero__content {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 48px var(--gutter);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: center;
+}
+
+.hero__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(30, 136, 229, 0.2);
+  color: #a2c9ff;
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(162, 201, 255, 0.3);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 20px;
+  backdrop-filter: blur(8px);
+}
+
+.hero__title {
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 800;
+  color: var(--blanco);
+  line-height: 1.15;
+  margin-bottom: 20px;
+}
+
+.hero__title span {
+  color: #44d8f1;
+}
+
+.hero__text {
+  font-size: 1.125rem;
+  color: rgba(255, 255, 255, 0.85);
+  max-width: 520px;
+  margin-bottom: 28px;
+}
+
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+/* Grid de estadísticas (bento Stitch) */
+.hero__stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  position: relative;
+}
+
+.hero__stats-accent {
+  position: absolute;
+  top: -48px;
+  right: -48px;
+  width: 128px;
+  height: 128px;
+  background: rgba(30, 136, 229, 0.1);
+  border-radius: 50%;
+  filter: blur(40px);
+  pointer-events: none;
+}
+
+.stat-card {
+  padding: 20px;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px var(--sombra-fuerte);
+}
+
+.stat-card:nth-child(1) {
+  transform: translateY(32px);
+}
+
+.stat-card:nth-child(3) {
+  grid-column: span 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  transform: translateY(-16px);
+}
+
+.stat-card__icon {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+
+.stat-card__icon--alert {
+  background: rgba(186, 26, 26, 0.1);
+  color: #ba1a1a;
+}
+
+.stat-card__icon--teal {
+  background: rgba(0, 188, 212, 0.2);
+  color: var(--teal);
+}
+
+.stat-card__icon--blue {
+  background: rgba(30, 136, 229, 0.1);
+  color: var(--azul-medio);
+}
+
+.stat-card__label {
+  font-size: 0.875rem;
+  color: var(--texto-suave);
+  font-weight: 600;
+}
+
+.stat-card__value {
+  font-family: 'Raleway', sans-serif;
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--azul-profundo);
+}
+
+.stat-card__tag {
+  background: #d3e4ff;
+  color: #004881;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+/* Sección informativa debajo del hero (Stitch) */
+.hero-info {
+  background: #f5f2ff;
+  padding: 80px 0;
+}
+
+.hero-info__header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 24px;
+  margin-bottom: 48px;
+}
+
+.hero-info__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--azul-medio);
+  font-weight: 700;
+}
+
+.hero-info__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.feature-card {
+  background: var(--blanco);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  border: 1px solid rgba(196, 198, 209, 0.3);
+  box-shadow: 0 2px 8px var(--sombra);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.feature-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px var(--sombra-fuerte);
+}
+
+.feature-card__img {
+  width: 100%;
+  height: 192px;
+  border-radius: var(--radius);
+  margin-bottom: 16px;
+  overflow: hidden;
+}
+
+.feature-card h4 {
+  font-size: 1.25rem;
+  margin-bottom: 8px;
+}
+
+.feature-card p {
+  color: var(--texto-suave);
+  margin-bottom: 16px;
+  font-size: 0.95rem;
+}
+
+.feature-card__btn {
+  color: var(--azul-medio);
+  font-weight: 700;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  font-family: inherit;
+}
+
+.feature-card__btn:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 1024px) {
+  .hero__content {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .hero__text {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .hero__actions {
+    justify-content: center;
+  }
+
+  .hero__stats {
+    max-width: 480px;
+    margin: 0 auto;
+  }
+
+  .stat-card:nth-child(1) {
+    transform: none;
+  }
+
+  .stat-card:nth-child(3) {
+    transform: none;
+  }
+
+  .hero-info__grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero {
+    min-height: auto;
+    padding-bottom: 40px;
+  }
+
+  .hero__stats {
+    grid-template-columns: 1fr;
+  }
+
+  .stat-card:nth-child(3) {
+    grid-column: span 1;
+  }
+}

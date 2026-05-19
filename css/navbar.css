@@ -1,0 +1,144 @@
+/* ============================================
+   Navbar fija con glassmorphism
+   ============================================ */
+
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  height: var(--nav-height);
+  background: rgba(10, 42, 94, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  transition: background 0.3s, box-shadow 0.3s, padding 0.3s;
+}
+
+.navbar--scrolled {
+  background: rgba(10, 42, 94, 0.88);
+  box-shadow: 0 8px 32px var(--sombra);
+}
+
+.navbar__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+
+.navbar__logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--blanco);
+  font-family: 'Raleway', sans-serif;
+  font-weight: 700;
+  font-size: 1.25rem;
+}
+
+.navbar__logo-icon {
+  color: var(--teal);
+  font-size: 28px;
+}
+
+.navbar__menu {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
+.navbar__link {
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 600;
+  font-size: 1rem;
+  padding-bottom: 4px;
+  border-bottom: 2px solid transparent;
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.navbar__link:hover,
+.navbar__link--active {
+  color: var(--teal);
+  border-bottom-color: var(--teal);
+}
+
+/* Hamburguesa — móvil */
+.navbar__toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 40px;
+  height: 40px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+}
+
+.navbar__toggle span {
+  display: block;
+  width: 100%;
+  height: 3px;
+  background: var(--blanco);
+  border-radius: 2px;
+  transition: transform 0.3s, opacity 0.3s;
+}
+
+.navbar__toggle[aria-expanded="true"] span:nth-child(1) {
+  transform: translateY(8px) rotate(45deg);
+}
+
+.navbar__toggle[aria-expanded="true"] span:nth-child(2) {
+  opacity: 0;
+}
+
+.navbar__toggle[aria-expanded="true"] span:nth-child(3) {
+  transform: translateY(-8px) rotate(-45deg);
+}
+
+@media (max-width: 768px) {
+  .navbar__toggle {
+    display: flex;
+  }
+
+  .navbar__menu {
+    position: fixed;
+    top: var(--nav-height);
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    gap: 0;
+    background: rgba(10, 42, 94, 0.98);
+    backdrop-filter: blur(16px);
+    padding: 16px 0;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: max-height 0.35s ease, opacity 0.3s;
+  }
+
+  .navbar__menu.is-open {
+    max-height: 320px;
+    opacity: 1;
+  }
+
+  .navbar__link {
+    display: block;
+    width: 100%;
+    padding: 16px var(--gutter);
+    border-bottom: none;
+    border-left: 3px solid transparent;
+  }
+
+  .navbar__link:hover,
+  .navbar__link--active {
+    background: rgba(255, 255, 255, 0.05);
+    border-left-color: var(--teal);
+  }
+}

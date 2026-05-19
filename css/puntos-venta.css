@@ -1,0 +1,93 @@
+/* ============================================
+   Puntos de Venta de Agua Potable
+   ============================================ */
+
+#puntos-venta {
+  background: var(--azul-claro);
+}
+
+.puntos-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.punto-card {
+  padding: 24px;
+  border-left: 4px solid var(--azul-medio);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.punto-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px var(--sombra-fuerte);
+}
+
+.punto-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.punto-card__nombre {
+  font-family: 'Raleway', sans-serif;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--azul-profundo);
+}
+
+.punto-card__meta {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.punto-card__row {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 0.95rem;
+  color: var(--texto-suave);
+}
+
+.punto-card__row .material-symbols-outlined {
+  font-size: 20px;
+  color: var(--azul-medio);
+  flex-shrink: 0;
+}
+
+.punto-card__precio {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(10, 42, 94, 0.08);
+  font-family: 'Raleway', sans-serif;
+  font-weight: 800;
+  font-size: 1.125rem;
+  color: var(--teal);
+}
+
+.puntos-empty,
+.puntos-error {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 48px;
+  color: var(--texto-suave);
+}
+
+.puntos-error {
+  color: #c62828;
+}
+
+@media (max-width: 1024px) {
+  .puntos-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .puntos-grid {
+    grid-template-columns: 1fr;
+  }
+}
