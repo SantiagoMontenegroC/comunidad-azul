@@ -94,32 +94,34 @@
 
         <!-- Columna derecha: estadísticas (bento Stitch) -->
         <div class="hero__stats">
-          <div class="hero__stats-accent" aria-hidden="true"></div>
-          <article class="stat-card glass-card">
-            <div class="stat-card__icon stat-card__icon--alert">
+          <div class="hero__stats-glow" aria-hidden="true"></div>
+          <article class="stat-card stat-card--alert">
+            <div class="stat-card__icon-wrap">
               <span class="material-symbols-outlined material-symbols-outlined--fill">timer</span>
             </div>
-            <p class="stat-card__label">Días sin agua</p>
-            <p class="stat-card__value">03</p>
+            <div class="stat-card__body">
+              <span class="stat-card__label">Días sin agua</span>
+              <span class="stat-card__value">03</span>
+            </div>
           </article>
-          <article class="stat-card glass-card">
-            <div class="stat-card__icon stat-card__icon--teal">
+          <article class="stat-card stat-card--water">
+            <div class="stat-card__icon-wrap">
               <span class="material-symbols-outlined material-symbols-outlined--fill">water_full</span>
             </div>
-            <p class="stat-card__label">Tanques disponibles</p>
-            <p class="stat-card__value">12</p>
-          </article>
-          <article class="stat-card glass-card">
-            <div style="display:flex;align-items:center;gap:16px;">
-              <div class="stat-card__icon stat-card__icon--blue">
-                <span class="material-symbols-outlined material-symbols-outlined--fill">campaign</span>
-              </div>
-              <div>
-                <p class="stat-card__label">Reportes activos</p>
-                <p class="stat-card__value" style="font-size:1.25rem;">24 Casos hoy</p>
-              </div>
+            <div class="stat-card__body">
+              <span class="stat-card__label">Tanques disponibles</span>
+              <span class="stat-card__value">12</span>
             </div>
-            <span class="stat-card__tag">En curso</span>
+          </article>
+          <article class="stat-card stat-card--reports">
+            <div class="stat-card__icon-wrap">
+              <span class="material-symbols-outlined material-symbols-outlined--fill">campaign</span>
+            </div>
+            <div class="stat-card__body">
+              <span class="stat-card__label">Reportes activos</span>
+              <span class="stat-card__value">24 <small>casos hoy</small></span>
+              <span class="stat-card__badge">En curso</span>
+            </div>
           </article>
         </div>
       </div>
