@@ -53,8 +53,7 @@ async function cargarPuntosVenta() {
 
   return client
     .from('puntos_venta')
-    .select('id, nombre, direccion, horario, precio')
-    .eq('activo', true)
+    .select('id, nombre, direccion, horario, precio, activo')
     .order('nombre', { ascending: true });
 }
 

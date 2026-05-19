@@ -1,59 +1,304 @@
 /* ============================================
-   Puntos de Venta de Agua Potable
+   Puntos de Venta — Mapa interactivo (Stitch)
    ============================================ */
 
 #puntos-venta {
   background: var(--azul-claro);
 }
 
-.puntos-grid {
+.puntos-intro {
+  max-width: 42rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.puntos-layout {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: 1fr;
   gap: 24px;
+  align-items: start;
+}
+
+@media (min-width: 1024px) {
+  .puntos-layout {
+    grid-template-columns: minmax(0, 2fr) minmax(280px, 1fr);
+    gap: 32px;
+  }
+}
+
+/* —— Mapa —— */
+.puntos-mapa {
+  position: relative;
+  min-height: min(520px, 65vh);
+  height: min(600px, 72vh);
+  padding: 0;
+  overflow: hidden;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  box-shadow: 0 16px 48px var(--sombra-fuerte);
+}
+
+.puntos-mapa__viewport {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.puntos-mapa__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(0.15) saturate(1.05);
+  transition: transform 0.45s ease;
+  transform-origin: center center;
+  will-change: transform;
+}
+
+.puntos-mapa:hover .puntos-mapa__img {
+  filter: grayscale(0.05) saturate(1.1);
+}
+
+.puntos-mapa__markers {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.punto-marker {
+  position: absolute;
+  transform: translate(-50%, -100%);
+  pointer-events: auto;
+  cursor: pointer;
+  border: none;
+  background: none;
+  padding: 0;
+  z-index: 1;
+}
+
+.punto-marker__pin {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--azul-medio);
+  color: var(--blanco);
+  box-shadow: 0 6px 20px rgba(0, 22, 60, 0.35);
+  transition: transform 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
+}
+
+.punto-marker--activo .punto-marker__pin {
+  background: var(--teal);
+}
+
+.punto-marker--inactivo .punto-marker__pin {
+  background: #c62828;
+}
+
+.punto-marker--selected .punto-marker__pin {
+  transform: scale(1.15);
+  box-shadow: 0 8px 28px rgba(0, 150, 136, 0.55);
+  outline: 3px solid rgba(255, 255, 255, 0.9);
+  outline-offset: 2px;
+}
+
+.punto-marker--pulse .punto-marker__pin {
+  animation: markerPulse 2s ease-in-out infinite;
+}
+
+.punto-marker__tooltip {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  min-width: 9rem;
+  padding: 8px 10px;
+  border-radius: 10px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-align: center;
+  color: var(--azul-profundo);
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 8px 24px var(--sombra);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  white-space: nowrap;
+}
+
+.punto-marker:hover .punto-marker__tooltip,
+.punto-marker--selected .punto-marker__tooltip,
+.punto-marker:focus-visible .punto-marker__tooltip {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.punto-marker:focus-visible {
+  outline: none;
+}
+
+.punto-marker:focus-visible .punto-marker__pin {
+  outline: 3px solid var(--azul-medio);
+  outline-offset: 3px;
+}
+
+@keyframes markerPulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.08);
+  }
+}
+
+.puntos-mapa__leyenda {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  z-index: 4;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--azul-profundo);
+  pointer-events: none;
+}
+
+.puntos-mapa__leyenda .material-symbols-outlined {
+  font-size: 20px;
+  color: var(--azul-medio);
+}
+
+.puntos-mapa__zoom {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.puntos-mapa__zoom-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(10px);
+  color: var(--azul-profundo);
+  cursor: pointer;
+  box-shadow: 0 4px 16px var(--sombra);
+  transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.puntos-mapa__zoom-btn:hover {
+  background: var(--blanco);
+  transform: scale(1.05);
+}
+
+.puntos-mapa__zoom-btn:active {
+  transform: scale(0.96);
+}
+
+/* —— Lista lateral —— */
+.puntos-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-height: min(600px, 72vh);
+  overflow-y: auto;
+  padding-right: 4px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--azul-medio) transparent;
 }
 
 .punto-card {
-  padding: 24px;
+  padding: 20px 22px;
   border-left: 4px solid var(--azul-medio);
-  transition: transform 0.3s, box-shadow 0.3s;
+  cursor: pointer;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
 }
 
 .punto-card:hover {
-  transform: translateY(-4px);
+  transform: translateX(4px);
   box-shadow: 0 12px 40px var(--sombra-fuerte);
 }
 
-.punto-card__header {
+.punto-card--selected {
+  border-left-color: var(--teal);
+  box-shadow: 0 0 0 2px rgba(0, 150, 136, 0.25);
+  transform: translateX(4px);
+}
+
+.punto-card--inactivo {
+  border-left-color: #c62828;
+  opacity: 0.92;
+}
+
+.punto-card__top {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
   gap: 12px;
-  margin-bottom: 16px;
+  margin-bottom: 14px;
 }
 
 .punto-card__nombre {
   font-family: 'Raleway', sans-serif;
-  font-size: 1.25rem;
-  font-weight: 600;
+  font-size: 1.125rem;
+  font-weight: 700;
   color: var(--azul-profundo);
+  margin: 0;
+}
+
+.punto-card__estado {
+  flex-shrink: 0;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.punto-card__estado--activo {
+  background: #e0f7fa;
+  color: #00695c;
+}
+
+.punto-card__estado--inactivo {
+  background: #ffebee;
+  color: #c62828;
 }
 
 .punto-card__meta {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
 }
 
 .punto-card__row {
   display: flex;
   align-items: flex-start;
   gap: 8px;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   color: var(--texto-suave);
 }
 
 .punto-card__row .material-symbols-outlined {
-  font-size: 20px;
+  font-size: 18px;
   color: var(--azul-medio);
   flex-shrink: 0;
 }
@@ -64,15 +309,49 @@
   border-top: 1px solid rgba(10, 42, 94, 0.08);
   font-family: 'Raleway', sans-serif;
   font-weight: 800;
-  font-size: 1.125rem;
+  font-size: 1.05rem;
   color: var(--teal);
+}
+
+.punto-card__barra {
+  margin-top: 12px;
+}
+
+.punto-card__barra-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  color: var(--texto-suave);
+  margin-bottom: 6px;
+}
+
+.punto-card__barra-label strong {
+  color: var(--azul-profundo);
+}
+
+.punto-card__barra-track {
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(10, 42, 94, 0.1);
+  overflow: hidden;
+}
+
+.punto-card__barra-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--azul-medio), var(--teal));
+  transition: width 0.5s ease;
+}
+
+.punto-card--inactivo .punto-card__barra-fill {
+  background: #ef5350;
+  width: 0 !important;
 }
 
 .puntos-empty,
 .puntos-error {
-  grid-column: 1 / -1;
   text-align: center;
-  padding: 48px;
+  padding: 32px 16px;
   color: var(--texto-suave);
 }
 
@@ -80,14 +359,17 @@
   color: #c62828;
 }
 
-@media (max-width: 1024px) {
-  .puntos-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
+.puntos-lista .skeleton-card {
+  min-height: 140px;
 }
 
-@media (max-width: 768px) {
-  .puntos-grid {
-    grid-template-columns: 1fr;
+@media (max-width: 1023px) {
+  .puntos-mapa {
+    min-height: 360px;
+    height: 400px;
+  }
+
+  .puntos-lista {
+    max-height: none;
   }
 }

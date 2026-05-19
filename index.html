@@ -159,15 +159,45 @@
     </div>
   </section>
 
-  <!-- ========== 3. PUNTOS DE VENTA ========== -->
+  <!-- ========== 3. PUNTOS DE VENTA (mapa Stitch) ========== -->
   <section id="puntos-venta" class="section" aria-label="Puntos de venta">
     <div class="container">
       <header class="section__header fade-in">
-        <h2 class="section__title">Puntos de Venta de Agua Potable</h2>
-        <p class="section__subtitle">Encuentra el punto más cercano a tu hogar</p>
+        <h2 class="section__title">Mapa de Suministro</h2>
+        <p class="section__subtitle puntos-intro">
+          Localiza los puntos de distribución de agua potable autorizados en el Barrio Divino Niño 1.
+          Consulta horarios y precios actualizados desde la base de datos.
+        </p>
       </header>
-      <!-- Grid cargado dinámicamente desde Supabase -->
-      <div id="puntos-grid" class="puntos-grid" aria-live="polite"></div>
+
+      <div class="puntos-layout fade-in">
+        <div class="puntos-mapa glass-card" id="puntos-mapa" aria-label="Mapa interactivo del barrio">
+          <div class="puntos-mapa__viewport" id="puntos-mapa-viewport">
+            <img
+              class="puntos-mapa__img"
+              id="puntos-mapa-img"
+              src="img/stitch/mapa-suministro.jpg"
+              alt="Mapa del Barrio Divino Niño 1 con puntos de agua"
+              loading="lazy"
+            />
+            <div class="puntos-mapa__markers" id="puntos-mapa-markers"></div>
+          </div>
+          <div class="puntos-mapa__leyenda glass-card">
+            <span class="material-symbols-outlined" aria-hidden="true">water_drop</span>
+            <span id="puntos-mapa-leyenda">Cargando puntos…</span>
+          </div>
+          <div class="puntos-mapa__zoom" role="group" aria-label="Controles de zoom del mapa">
+            <button type="button" class="puntos-mapa__zoom-btn" id="mapa-zoom-in" aria-label="Acercar">
+              <span class="material-symbols-outlined">add</span>
+            </button>
+            <button type="button" class="puntos-mapa__zoom-btn" id="mapa-zoom-out" aria-label="Alejar">
+              <span class="material-symbols-outlined">remove</span>
+            </button>
+          </div>
+        </div>
+
+        <div id="puntos-lista" class="puntos-lista" aria-live="polite"></div>
+      </div>
     </div>
   </section>
 
