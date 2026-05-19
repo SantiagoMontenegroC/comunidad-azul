@@ -85,29 +85,20 @@
   font-size: 32px;
 }
 
-/* Footer */
+/* Footer (Stitch) */
 .site-footer {
   position: relative;
   background: var(--azul-profundo);
   color: var(--blanco);
-  padding-top: 3.5rem;
-  margin-top: -1px;
+  padding-top: 80px;
 }
 
-.footer__wave {
-  position: absolute;
+.site-footer .waves-top {
   top: 0;
-  left: 0;
-  width: 100%;
-  line-height: 0;
-  transform: translateY(-99.5%);
-  pointer-events: none;
 }
 
-.footer__wave svg {
-  display: block;
-  width: 100%;
-  height: 48px;
+.site-footer .waves-top .shape-fill {
+  fill: var(--azul-claro);
 }
 
 .footer__grid {

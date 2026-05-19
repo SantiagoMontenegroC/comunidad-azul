@@ -32,10 +32,8 @@
   position: absolute;
   inset: 0;
   background: linear-gradient(
-    115deg,
-    rgba(5, 20, 48, 0.92) 0%,
-    rgba(10, 42, 94, 0.78) 50%,
-    rgba(10, 42, 94, 0.55) 100%
+    rgba(10, 42, 94, 0.85),
+    rgba(10, 42, 94, 0.55)
   );
   z-index: 1;
 }
@@ -52,26 +50,12 @@
 
 .hero__waves svg {
   display: block;
-  width: calc(100% + 1.3px);
+  width: 100%;
   height: 80px;
 }
 
 .hero__waves .shape-fill {
   fill: var(--azul-claro);
-}
-
-.hero__wave-layer {
-  animation: heroWave 6s ease-in-out infinite alternate;
-}
-
-.hero__wave-layer--delay {
-  animation-delay: -3s;
-  opacity: 0.7;
-}
-
-@keyframes heroWave {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-24px); }
 }
 
 /* Contenedor principal: texto + tarjetas */
