@@ -289,23 +289,6 @@ async function initPuntosVenta() {
   const { data, error } = await cargarPuntosVenta();
 
   if (error) {
-    const sinColumnas =
-      error.message?.includes('lat') ||
-      error.message?.includes('lng') ||
-      error.code === '42703';
-
-    if (sinColumnas) {
-      const { data: dataBasica, error: err2 } = await getSupabase()
-        .from('puntos_venta')
-        .select('id, nombre, direccion, horario, precio, activo')
-        .order('nombre', { ascending: true });
-
-      if (!err2 && dataBasica) {
-        renderizarPuntos(dataBasica);
-        return;
-      }
-    }
-
     puntosLista.innerHTML = `<p class="puntos-error glass-card">Error al cargar puntos: ${escaparHtml(error.message)}. Verifica tu conexión a Supabase.</p>`;
     if (puntosMapaLeyenda) puntosMapaLeyenda.textContent = 'Mapa no disponible';
     return;

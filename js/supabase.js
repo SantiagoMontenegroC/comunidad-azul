@@ -41,8 +41,20 @@ function getSupabase() {
   return supabaseClient;
 }
 
+/** Error por columnas lat/lng aún no creadas en Supabase */
+function esErrorColumnasGeo(error) {
+  if (!error) return false;
+  const msg = (error.message || '').toLowerCase();
+  return (
+    error.code === '42703' ||
+    error.code === 'PGRST204' ||
+    msg.includes('lat') ||
+    msg.includes('lng')
+  );
+}
+
 /**
- * SELECT — Puntos de venta activos
+ * SELECT — Puntos de venta (con o sin coordenadas en la BD)
  * @returns {Promise<{data: Array|null, error: object|null}>}
  */
 async function cargarPuntosVenta() {
@@ -51,9 +63,18 @@ async function cargarPuntosVenta() {
     return { data: null, error: { message: 'Supabase no configurado' } };
   }
 
-  return client
+  const conGeo = await client
     .from('puntos_venta')
     .select('id, nombre, direccion, horario, precio, activo, lat, lng')
+    .order('nombre', { ascending: true });
+
+  if (!esErrorColumnasGeo(conGeo.error)) {
+    return conGeo;
+  }
+
+  return client
+    .from('puntos_venta')
+    .select('id, nombre, direccion, horario, precio, activo')
     .order('nombre', { ascending: true });
 }
 

@@ -112,9 +112,13 @@ async function actualizarEstadisticasHero() {
   const badgeEl = document.getElementById('hero-reportes-badge');
 
   const { data: puntos, error: errPuntos } = await cargarPuntosVenta();
-  if (!errPuntos && puntosEl && puntos) {
-    const activos = puntos.filter((p) => p.activo !== false).length;
-    puntosEl.textContent = String(activos).padStart(2, '0');
+  if (puntosEl) {
+    if (!errPuntos && Array.isArray(puntos)) {
+      const activos = puntos.filter((p) => p.activo !== false).length;
+      puntosEl.textContent = String(activos).padStart(2, '0');
+    } else {
+      console.warn('Hero puntos activos:', errPuntos?.message || 'sin datos');
+    }
   }
 
   const { data: reportes, error: errReportes } = await cargarReportes();
