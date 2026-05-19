@@ -80,7 +80,7 @@ function initHeroButtons() {
   });
 
   btnProyecto?.addEventListener('click', () => {
-    document.querySelector('.hero-info')?.scrollIntoView({ behavior: 'smooth' });
+    document.getElementById('puntos-venta')?.scrollIntoView({ behavior: 'smooth' });
   });
 
   document.querySelectorAll('[data-scroll]').forEach((btn) => {
