@@ -81,8 +81,22 @@
   box-shadow: 0 6px 28px rgba(37, 211, 102, 0.6);
 }
 
-.whatsapp-float .material-symbols-outlined {
-  font-size: 32px;
+.icon-whatsapp {
+  display: block;
+  width: 22px;
+  height: 22px;
+  fill: currentColor;
+  flex-shrink: 0;
+}
+
+.icon-whatsapp--lg {
+  width: 32px;
+  height: 32px;
+}
+
+.btn--whatsapp .icon-whatsapp {
+  width: 22px;
+  height: 22px;
 }
 
 /* Footer (Stitch) */
