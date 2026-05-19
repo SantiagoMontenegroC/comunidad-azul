@@ -4,6 +4,7 @@
  */
 
 const puntosLista = document.getElementById('puntos-lista');
+const puntosMapa = document.getElementById('puntos-mapa');
 const mapaCanvas = document.getElementById('puntos-mapa-canvas');
 const puntosMapaLeyenda = document.getElementById('puntos-mapa-leyenda');
 const btnZoomIn = document.getElementById('mapa-zoom-in');
@@ -191,7 +192,7 @@ function renderizarLista(puntos) {
 
   const activos = puntos.filter((p) => estaActivo(p)).length;
   if (puntosMapaLeyenda) {
-    puntosMapaLeyenda.textContent = `${activos} de ${puntos.length} tanques activos · mapa gratuito`;
+    puntosMapaLeyenda.textContent = `${activos} de ${puntos.length} tanques activos en el barrio`;
   }
 
   puntosLista.innerHTML = puntos
@@ -257,6 +258,20 @@ function renderizarLista(puntos) {
   });
 }
 
+/** En escritorio, el mapa iguala la altura de la columna de tarjetas */
+function sincronizarAlturaMapa() {
+  if (!puntosMapa || !puntosLista || window.innerWidth < 1024) {
+    if (puntosMapa) puntosMapa.style.height = '';
+    return;
+  }
+
+  puntosMapa.style.height = `${puntosLista.offsetHeight}px`;
+
+  if (mapaLeaflet) {
+    requestAnimationFrame(() => mapaLeaflet.invalidateSize());
+  }
+}
+
 function renderizarPuntos(puntos) {
   puntosActuales = enriquecerPuntos(puntos);
   renderizarLista(puntosActuales);
@@ -264,6 +279,10 @@ function renderizarPuntos(puntos) {
   if (puntosActuales.length > 0) {
     seleccionarPunto(0);
   }
+  requestAnimationFrame(() => {
+    sincronizarAlturaMapa();
+    setTimeout(sincronizarAlturaMapa, 150);
+  });
 }
 
 function initZoomMapa() {
@@ -298,3 +317,4 @@ async function initPuntosVenta() {
 }
 
 document.addEventListener('DOMContentLoaded', initPuntosVenta);
+window.addEventListener('resize', sincronizarAlturaMapa);
