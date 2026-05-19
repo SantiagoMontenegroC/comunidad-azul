@@ -113,7 +113,8 @@ async function actualizarEstadisticasHero() {
 
   const { data: puntos, error: errPuntos } = await cargarPuntosVenta();
   if (!errPuntos && puntosEl && puntos) {
-    puntosEl.textContent = String(puntos.length).padStart(2, '0');
+    const activos = puntos.filter((p) => p.activo !== false).length;
+    puntosEl.textContent = String(activos).padStart(2, '0');
   }
 
   const { data: reportes, error: errReportes } = await cargarReportes();
