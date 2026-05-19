@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
@@ -50,10 +50,9 @@
     <div class="hero">
       <!-- Fondo con imagen y gradiente -->
       <div class="hero__bg" aria-hidden="true">
-        <!-- Reemplaza src por img/hero-agua.jpg cuando tengas tu imagen local -->
         <img
           class="hero__bg-image"
-          src="https://lh3.googleusercontent.com/aida-public/AB6AXuB2Tw_2OvNYc9hiGnk67t4aHnIfL7qKOiet2s9E6eVXn4SuLouIrCzbwEQY29HHEQZOY3d4y1LsSXeIM8NirNYkCcUBZX8-EIjTn6Xi8zSX1MWnwHTYMHWrQm1i9x_ek-RU6aucGRMEOSvs854y-k_xwPLSI1MwBK92gWOiaC6fSWDEoXncVQyUOX0Y2ef7-k-iecShrRcaLEdGRr25KSGs6PhpzettduCsoohrtNZnS4cddEdhbtCct36iBbOrhbnw9X3o8pUfmQ"
+          src="img/stitch/hero-agua.jpg"
           alt="Ondas de agua en tonos azules"
         />
         <div class="hero__bg-overlay"></div>
@@ -120,6 +119,49 @@
               <span class="stat-card__value" id="hero-reportes-count">—</span>
               <span class="stat-card__badge" id="hero-reportes-badge">En curso</span>
             </div>
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-info">
+      <div class="container">
+        <div class="hero-info__header fade-in">
+          <div>
+            <h2 class="section__title">Acción Comunitaria Transparente</h2>
+            <p class="section__subtitle hero-info__subtitle">
+              Monitoreamos cada gota para asegurar que llegue a cada hogar.
+            </p>
+          </div>
+          <a href="#puntos-venta" class="hero-info__link">
+            Explorar mapa completo
+            <span class="material-symbols-outlined">arrow_forward</span>
+          </a>
+        </div>
+        <div class="hero-info__grid">
+          <article class="feature-card fade-in">
+            <div class="feature-card__img">
+              <img src="img/stitch/mapa-suministro.jpg" alt="Mapa de suministro del barrio" loading="lazy" />
+            </div>
+            <h4>Mapa de Suministro</h4>
+            <p>Ubica los puntos de distribución activos y el estado de las tuberías principales.</p>
+            <button type="button" class="feature-card__btn" data-scroll="#puntos-venta">Consultar Mapa</button>
+          </article>
+          <article class="feature-card fade-in">
+            <div class="feature-card__img">
+              <img src="img/stitch/accion-comunitaria.jpg" alt="Acción comunitaria" loading="lazy" />
+            </div>
+            <h4>Gestión de Reportes</h4>
+            <p>¿Fugas o falta de presión? Reporta incidentes y sigue el proceso de resolución.</p>
+            <button type="button" class="feature-card__btn" data-scroll="#reportes">Nuevo Reporte</button>
+          </article>
+          <article class="feature-card fade-in">
+            <div class="feature-card__img">
+              <img src="img/stitch/panel-transparencia.jpg" alt="Panel de transparencia" loading="lazy" />
+            </div>
+            <h4>Panel de Transparencia</h4>
+            <p>Accede a estadísticas de uso y donaciones para el mantenimiento del sistema.</p>
+            <button type="button" class="feature-card__btn" data-scroll="#reportes">Ver Datos</button>
           </article>
         </div>
       </div>
