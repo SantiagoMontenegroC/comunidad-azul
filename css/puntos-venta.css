@@ -21,21 +21,30 @@
 
 @media (min-width: 1024px) {
   .puntos-layout {
-    grid-template-columns: minmax(0, 2fr) minmax(280px, 1fr);
-    gap: 32px;
+    grid-template-columns: minmax(0, 1.2fr) minmax(300px, 1fr);
+    gap: 28px;
+    align-items: stretch;
   }
 }
 
 /* —— Mapa —— */
 .puntos-mapa {
   position: relative;
-  min-height: min(520px, 65vh);
-  height: min(600px, 72vh);
+  min-height: 320px;
+  height: 400px;
   padding: 0;
   overflow: hidden;
   border-radius: 16px;
   border: 1px solid rgba(255, 255, 255, 0.45);
   box-shadow: 0 16px 48px var(--sombra-fuerte);
+}
+
+@media (min-width: 1024px) {
+  .puntos-mapa {
+    height: 100%;
+    min-height: 0;
+    max-height: 520px;
+  }
 }
 
 .puntos-mapa__viewport {
@@ -216,16 +225,12 @@
 .puntos-lista {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  max-height: min(600px, 72vh);
-  overflow-y: auto;
-  padding-right: 4px;
-  scrollbar-width: thin;
-  scrollbar-color: var(--azul-medio) transparent;
+  gap: 12px;
+  overflow: visible;
 }
 
 .punto-card {
-  padding: 20px 22px;
+  padding: 14px 16px;
   border-left: 4px solid var(--azul-medio);
   cursor: pointer;
   transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
@@ -251,16 +256,17 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  gap: 12px;
-  margin-bottom: 14px;
+  gap: 10px;
+  margin-bottom: 10px;
 }
 
 .punto-card__nombre {
   font-family: 'Raleway', sans-serif;
-  font-size: 1.125rem;
+  font-size: 1rem;
   font-weight: 700;
   color: var(--azul-profundo);
   margin: 0;
+  line-height: 1.25;
 }
 
 .punto-card__estado {
@@ -286,43 +292,44 @@
 .punto-card__meta {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
 }
 
 .punto-card__row {
   display: flex;
   align-items: flex-start;
-  gap: 8px;
-  font-size: 0.9rem;
+  gap: 6px;
+  font-size: 0.8125rem;
+  line-height: 1.35;
   color: var(--texto-suave);
 }
 
 .punto-card__row .material-symbols-outlined {
-  font-size: 18px;
+  font-size: 16px;
   color: var(--azul-medio);
   flex-shrink: 0;
 }
 
 .punto-card__precio {
-  margin-top: 12px;
-  padding-top: 12px;
+  margin-top: 8px;
+  padding-top: 8px;
   border-top: 1px solid rgba(10, 42, 94, 0.08);
   font-family: 'Raleway', sans-serif;
   font-weight: 800;
-  font-size: 1.05rem;
+  font-size: 0.95rem;
   color: var(--teal);
 }
 
 .punto-card__barra {
-  margin-top: 12px;
+  margin-top: 8px;
 }
 
 .punto-card__barra-label {
   display: flex;
   justify-content: space-between;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   color: var(--texto-suave);
-  margin-bottom: 6px;
+  margin-bottom: 4px;
 }
 
 .punto-card__barra-label strong {
@@ -330,10 +337,33 @@
 }
 
 .punto-card__barra-track {
-  height: 8px;
+  height: 6px;
   border-radius: 999px;
   background: rgba(10, 42, 94, 0.1);
   overflow: hidden;
+}
+
+@media (min-width: 1024px) {
+  .puntos-lista {
+    gap: 10px;
+  }
+
+  .punto-card {
+    padding: 12px 14px;
+  }
+
+  .punto-card__top {
+    margin-bottom: 8px;
+  }
+
+  .punto-card__nombre {
+    font-size: 0.95rem;
+  }
+
+  .punto-card__estado {
+    padding: 3px 8px;
+    font-size: 0.65rem;
+  }
 }
 
 .punto-card__barra-fill {
@@ -365,11 +395,7 @@
 
 @media (max-width: 1023px) {
   .puntos-mapa {
-    min-height: 360px;
-    height: 400px;
-  }
-
-  .puntos-lista {
-    max-height: none;
+    min-height: 300px;
+    height: 340px;
   }
 }

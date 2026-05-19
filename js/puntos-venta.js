@@ -80,9 +80,6 @@ function seleccionarPunto(index) {
 
   document.querySelectorAll('.punto-card').forEach((card, i) => {
     card.classList.toggle('punto-card--selected', i === index);
-    if (i === index) {
-      card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    }
   });
 }
 
