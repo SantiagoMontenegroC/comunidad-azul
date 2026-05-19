@@ -1,0 +1,64 @@
+---
+description: Contexto del proyecto Comunidad Azul (sitio, Stitch, Supabase, convenciones)
+alwaysApply: true
+---
+
+# Comunidad Azul — contexto del proyecto
+
+**Ruta:** `C:\Users\Santiago Montenegro\comunidad-azul`  
+**Repo:** https://github.com/SantiagoMontenegroC/comunidad-azul  
+**Tipo:** Sitio estático universitario (Barrio Divino Niño 1, Colombia). Deploy: **Netlify** en cada push a `main` (ver regla `despliegue-automatico.mdc`).
+
+## Diseño (Google Stitch)
+
+- Stitch es la **referencia visual**; no reinventar UI “premium” ni cambiar tarjetas/olas sin pedirlo.
+- Tipografías del sitio: **Raleway** (títulos) + **Nunito** (cuerpo) — no Montserrat del export Stitch.
+- Iconos: **Material Symbols Outlined**.
+- Imágenes Stitch: `img/stitch/` (`hero-agua.jpg`, `mapa-suministro.jpg`, `accion-comunitaria.jpg`, `panel-transparencia.jpg`). URLs originales en `js/imagenes-stitch.js`.
+
+## Estructura de `index.html`
+
+1. Navbar fija  
+2. `#inicio` — `.hero` (fondo + **una sola ola** SVG, sin capas animadas) + `.hero-info` (3 `feature-card`)  
+3. `#puntos-venta` — grid dinámico (`js/puntos-venta.js`)  
+4. `#reportes` — formulario + feed Realtime (`js/reportes.js`)  
+5. `#contacto` — formulario (`js/contacto.js`)  
+6. Footer con `waves-top` (Stitch)
+
+**Hero:** tarjetas bento blancas (`stat-card`); gradiente overlay vertical Stitch. Botones: “Ver estado del suministro” → `#puntos-venta`; “Conoce el proyecto” → scroll a `.hero-info`. Stats desde Supabase en `js/main.js`.
+
+**HTML:** editar con etiquetas `div` reales. Al parchear, el editor a veces corrompe `div` → `motion-div`; revisar que no queden tags inválidos. Cerrar `.hero` antes de `.hero-info` (hermanos dentro de `#inicio`).
+
+## Supabase
+
+- URL base (sin `/rest/v1`): `https://xyzyqkxdvdmyoevetxyw.supabase.co` — credenciales en `js/supabase.js`
+- Schema: `supabase/schema.sql`
+- Tablas: `puntos_venta`, `reportes`, `contactos`
+- Realtime en `reportes`
+
+## Archivos clave
+
+| Área | Archivos |
+|------|----------|
+| Global | `css/styles.css`, `js/main.js` |
+| Inicio | `css/inicio.css`, `index.html` (#inicio) |
+| Datos | `js/puntos-venta.js`, `js/reportes.js`, `js/contacto.js` |
+| Deploy | `desplegar.ps1`, `desplegar.bat` |
+
+## Preferencias del usuario (críticas)
+
+- Responder en **español**.
+- Commits en español; **sin** `Co-authored-by: Cursor`.
+- **No usar Python** para parches — editar archivos directamente (PowerShell solo si hace falta por encoding/insert).
+- Mantener correcciones de layout ya hechas; no reintroducir errores del export Stitch.
+- No añadir: `proyecto-aviso`, `footer__academico`, `dato-demo`, textos “referencia educativa”.
+
+## Git / herramientas
+
+- Git: **Santiago Montenegro** / `santiagom17calderon@gmail.com`
+- `gh` en `%LOCALAPPDATA%\Programs\gh-cli\bin\gh.exe` — usuario GitHub: **SantiagoMontenegroC**
+- PowerShell puede bloquear `.ps1`; usar `.bat` o `-ExecutionPolicy Bypass`
+
+## Si faltan assets Stitch
+
+Pedir carpeta `stitch_comunidad_azul_digital_platform` o nuevo export de Stitch para otras pantallas (puntos, reportes, contacto).
