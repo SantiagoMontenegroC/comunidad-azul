@@ -1,37 +1,36 @@
 /**
- * puntos-venta.js — Mapa interactivo + lista desde Supabase
+ * puntos-venta.js — Google Maps + lista desde Supabase
  */
 
 const puntosLista = document.getElementById('puntos-lista');
-const puntosMarcadores = document.getElementById('puntos-mapa-markers');
-const puntosMapaImg = document.getElementById('puntos-mapa-img');
+const mapaCanvas = document.getElementById('puntos-mapa-canvas');
 const puntosMapaLeyenda = document.getElementById('puntos-mapa-leyenda');
-const mapaViewport = document.getElementById('puntos-mapa-viewport');
+const mapaAviso = document.getElementById('puntos-mapa-aviso');
 const btnZoomIn = document.getElementById('mapa-zoom-in');
 const btnZoomOut = document.getElementById('mapa-zoom-out');
 
-/** Mapa 3D de la pantalla Puntos de Venta (Stitch) */
-const MAPA_PUNTOS_URL =
-  'https://lh3.googleusercontent.com/aida-public/AB6AXuAHqfoCOtF7Xc7NkCdObYap1D83nMEycereX0aeZCtU2OxTXDLpKksm2MXZEDusYA0coZ9Jwn4Lw-D9JesuR1gICealXr6VXIul5oeWO2t4fgBeasn0dy__VylOPj_c9y1cfAH_HOo8XhAlNWHQHgDquk5xsW-dfR4i9V3Wd5Vladx_6KR3p08Wsw4s_Rrqs6O0sDDFAeVtuLti9amPSPc93_LMtnaTjyjv3fkCtdgQcfaljTlkygbfge_BSa0LkRydHWZRvS_NKg';
+/** Tanques en Barrio Divino Niño 1 (lat, lng) */
+const TANQUES_COORDENADAS = {
+  'Punto Norte': { lat: 11.254994918626378, lng: -74.17079120137323 },
+  'Punto Sur': { lat: 11.251916597415095, lng: -74.16874979210517 },
+  'Punto Central': { lat: 11.253092870380645, lng: -74.17160776508045 },
+};
 
-const POSICIONES_POR_NOMBRE = [
-  { match: /norte/i, top: 28, left: 26 },
-  { match: /central/i, top: 44, left: 50 },
-  { match: /sur/i, top: 68, left: 38 },
-  { match: /plaza|manantial|cisterna/i, top: 52, left: 68 },
+const TANQUES_COORDENADAS_ORDEN = [
+  { lat: 11.254994918626378, lng: -74.17079120137323 },
+  { lat: 11.251916597415095, lng: -74.16874979210517 },
+  { lat: 11.253092870380645, lng: -74.17160776508045 },
 ];
 
-const POSICIONES_DEFAULT = [
-  { top: 30, left: 28 },
-  { top: 55, left: 62 },
-  { top: 72, left: 40 },
-  { top: 40, left: 72 },
-  { top: 62, left: 22 },
-];
+const MAPA_CENTRO = { lat: 11.253335, lng: -74.170382 };
+const MAPA_ZOOM_INICIAL = 17;
 
 let puntosActuales = [];
 let indiceSeleccionado = -1;
-let escalaMapa = 1;
+let googleMap = null;
+let googleMarcadores = [];
+let googleInfoVentana = null;
+let mapaListo = false;
 
 function escaparHtml(texto) {
   const div = document.createElement('div');
@@ -39,14 +38,21 @@ function escaparHtml(texto) {
   return div.innerHTML;
 }
 
-function obtenerPosicionMapa(punto, index) {
-  const nombre = punto.nombre || '';
-  for (const regla of POSICIONES_POR_NOMBRE) {
-    if (regla.match.test(nombre)) {
-      return { top: regla.top, left: regla.left };
-    }
+function resolverCoordenadas(punto, index) {
+  if (punto.lat != null && punto.lng != null && !Number.isNaN(Number(punto.lat))) {
+    return { lat: Number(punto.lat), lng: Number(punto.lng) };
   }
-  return POSICIONES_DEFAULT[index % POSICIONES_DEFAULT.length];
+  if (TANQUES_COORDENADAS[punto.nombre]) {
+    return TANQUES_COORDENADAS[punto.nombre];
+  }
+  return TANQUES_COORDENADAS_ORDEN[index % TANQUES_COORDENADAS_ORDEN.length];
+}
+
+function enriquecerPuntos(puntos) {
+  return (puntos || []).map((p, i) => ({
+    ...p,
+    ...resolverCoordenadas(p, i),
+  }));
 }
 
 function estaActivo(punto) {
@@ -59,6 +65,158 @@ function porcentajeDisponibilidad(punto, index) {
   return Math.min(95, base);
 }
 
+function obtenerApiKeyGoogle() {
+  const key = typeof MAPS_CONFIG !== 'undefined' ? MAPS_CONFIG.apiKey : '';
+  return (key || '').trim();
+}
+
+function mostrarAvisoMapa(mensaje) {
+  if (!mapaAviso) return;
+  mapaAviso.hidden = false;
+  mapaAviso.textContent = mensaje;
+}
+
+function cargarScriptGoogleMaps(apiKey) {
+  return new Promise((resolve, reject) => {
+    if (window.google?.maps) {
+      resolve();
+      return;
+    }
+    const existente = document.querySelector('script[data-google-maps]');
+    if (existente) {
+      existente.addEventListener('load', () => resolve());
+      existente.addEventListener('error', () => reject(new Error('No se pudo cargar Google Maps')));
+      return;
+    }
+    const script = document.createElement('script');
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${encodeURIComponent(apiKey)}&v=weekly&language=es`;
+    script.async = true;
+    script.defer = true;
+    script.dataset.googleMaps = '1';
+    script.onload = () => resolve();
+    script.onerror = () => reject(new Error('Error al cargar la API de Google Maps'));
+    document.head.appendChild(script);
+  });
+}
+
+function iconoMarcadorGoogle(activo, seleccionado) {
+  return {
+    path: google.maps.SymbolPath.CIRCLE,
+    scale: seleccionado ? 14 : 11,
+    fillColor: activo ? '#00897B' : '#c62828',
+    fillOpacity: 1,
+    strokeColor: '#ffffff',
+    strokeWeight: seleccionado ? 3 : 2,
+  };
+}
+
+function initGoogleMap(puntos) {
+  if (!mapaCanvas || !window.google?.maps) return false;
+
+  googleMap = new google.maps.Map(mapaCanvas, {
+    center: MAPA_CENTRO,
+    zoom: MAPA_ZOOM_INICIAL,
+    mapTypeControl: false,
+    streetViewControl: false,
+    fullscreenControl: true,
+    zoomControl: false,
+    styles: [
+      {
+        featureType: 'poi',
+        elementType: 'labels',
+        stylers: [{ visibility: 'off' }],
+      },
+    ],
+  });
+
+  googleInfoVentana = new google.maps.InfoWindow();
+  googleMarcadores = puntos.map((punto, index) => {
+    const activo = estaActivo(punto);
+    const marker = new google.maps.Marker({
+      position: { lat: punto.lat, lng: punto.lng },
+      map: googleMap,
+      title: punto.nombre,
+      icon: iconoMarcadorGoogle(activo, index === 0),
+      zIndex: index === 0 ? 10 : 1,
+    });
+
+    marker.addListener('click', () => {
+      seleccionarPunto(index);
+    });
+
+    return marker;
+  });
+
+  const bounds = new google.maps.LatLngBounds();
+  puntos.forEach((p) => bounds.extend({ lat: p.lat, lng: p.lng }));
+  googleMap.fitBounds(bounds, { top: 48, right: 48, bottom: 48, left: 48 });
+
+  google.maps.event.addListenerOnce(googleMap, 'idle', () => {
+    if (googleMap.getZoom() > 18) googleMap.setZoom(18);
+  });
+
+  mapaListo = true;
+  return true;
+}
+
+async function initMapaGoogle(puntos) {
+  const apiKey = obtenerApiKeyGoogle();
+  if (!apiKey) {
+    mostrarAvisoMapa(
+      'Para ver Google Maps, agrega tu API key en js/maps-config.js (Maps JavaScript API).'
+    );
+    mostrarEnlacesGoogleMaps(puntos);
+    return false;
+  }
+
+  try {
+    await cargarScriptGoogleMaps(apiKey);
+    return initGoogleMap(puntos);
+  } catch (err) {
+    console.error(err);
+    mostrarAvisoMapa(
+      'No se pudo cargar Google Maps. Revisa la API key y que esté habilitada “Maps JavaScript API”.'
+    );
+    mostrarEnlacesGoogleMaps(puntos);
+    return false;
+  }
+}
+
+function mostrarEnlacesGoogleMaps(puntos) {
+  if (!mapaCanvas) return;
+  const links = puntos
+    .map(
+      (p) =>
+        `<li><a href="https://www.google.com/maps?q=${p.lat},${p.lng}" target="_blank" rel="noopener noreferrer">${escaparHtml(p.nombre)}</a></li>`
+    )
+    .join('');
+  mapaCanvas.innerHTML = `<div class="puntos-mapa__fallback"><p>Ubicaciones de tanques:</p><ul>${links}</ul></div>`;
+}
+
+function actualizarMarcadoresGoogle() {
+  if (!googleMap || !googleMarcadores.length) return;
+
+  googleMarcadores.forEach((marker, i) => {
+    const activo = estaActivo(puntosActuales[i]);
+    marker.setIcon(iconoMarcadorGoogle(activo, i === indiceSeleccionado));
+    marker.setZIndex(i === indiceSeleccionado ? 20 : 1);
+  });
+
+  const punto = puntosActuales[indiceSeleccionado];
+  if (!punto) return;
+
+  googleMap.panTo({ lat: punto.lat, lng: punto.lng });
+  if (googleMap.getZoom() < 17) googleMap.setZoom(17);
+
+  if (googleInfoVentana) {
+    const estado = estaActivo(punto) ? 'Abierto' : 'Cerrado';
+    googleInfoVentana.setContent(
+      `<div class="puntos-mapa__info"><strong>${escaparHtml(punto.nombre)}</strong><br>${estado}<br><small>${escaparHtml(punto.direccion)}</small></div>`
+    );
+    googleInfoVentana.open(googleMap, googleMarcadores[indiceSeleccionado]);
+  }
+}
+
 function mostrarSkeletonPuntos(cantidad = 3) {
   if (!puntosLista) return;
   puntosLista.innerHTML = '';
@@ -67,52 +225,20 @@ function mostrarSkeletonPuntos(cantidad = 3) {
     el.className = 'skeleton skeleton-card glass-card';
     puntosLista.appendChild(el);
   }
-  if (puntosMarcadores) puntosMarcadores.innerHTML = '';
 }
 
 function seleccionarPunto(index) {
+  if (index < 0 || index >= puntosActuales.length) return;
   indiceSeleccionado = index;
-
-  document.querySelectorAll('.punto-marker').forEach((btn, i) => {
-    btn.classList.toggle('punto-marker--selected', i === index);
-    btn.classList.toggle('punto-marker--pulse', i === index);
-  });
 
   document.querySelectorAll('.punto-card').forEach((card, i) => {
     card.classList.toggle('punto-card--selected', i === index);
+    card.setAttribute('aria-pressed', i === index ? 'true' : 'false');
   });
-}
 
-function renderizarMarcadores(puntos) {
-  if (!puntosMarcadores) return;
-
-  puntosMarcadores.innerHTML = puntos
-    .map((p, i) => {
-      const pos = obtenerPosicionMapa(p, i);
-      const activo = estaActivo(p);
-      const estado = activo ? 'Abierto' : 'Cerrado';
-      return `
-        <button
-          type="button"
-          class="punto-marker ${activo ? 'punto-marker--activo' : 'punto-marker--inactivo'}${i === 0 ? ' punto-marker--pulse' : ''}"
-          style="top:${pos.top}%;left:${pos.left}%"
-          data-index="${i}"
-          aria-label="${escaparHtml(p.nombre)} — ${estado}"
-        >
-          <span class="punto-marker__pin">
-            <span class="material-symbols-outlined material-symbols-outlined--fill">location_on</span>
-          </span>
-          <span class="punto-marker__tooltip">${escaparHtml(p.nombre)} (${estado})</span>
-        </button>
-      `;
-    })
-    .join('');
-
-  puntosMarcadores.querySelectorAll('.punto-marker').forEach((btn) => {
-    btn.addEventListener('click', () => {
-      seleccionarPunto(Number(btn.dataset.index));
-    });
-  });
+  if (mapaListo) {
+    actualizarMarcadoresGoogle();
+  }
 }
 
 function renderizarLista(puntos) {
@@ -129,7 +255,7 @@ function renderizarLista(puntos) {
 
   const activos = puntos.filter((p) => estaActivo(p)).length;
   if (puntosMapaLeyenda) {
-    puntosMapaLeyenda.textContent = `${activos} de ${puntos.length} puntos activos en el barrio`;
+    puntosMapaLeyenda.textContent = `${activos} de ${puntos.length} tanques activos · Google Maps`;
   }
 
   puntosLista.innerHTML = puntos
@@ -159,6 +285,10 @@ function renderizarLista(puntos) {
           <span class="material-symbols-outlined">schedule</span>
           <span>${escaparHtml(p.horario || 'Consultar horario')}</span>
         </div>
+        <div class="punto-card__row punto-card__row--coords">
+          <span class="material-symbols-outlined">map</span>
+          <a href="https://www.google.com/maps?q=${p.lat},${p.lng}" target="_blank" rel="noopener noreferrer">Ver en Google Maps</a>
+        </div>
       </div>
       <div class="punto-card__barra">
         <div class="punto-card__barra-label">
@@ -178,7 +308,10 @@ function renderizarLista(puntos) {
   puntosLista.querySelectorAll('.punto-card').forEach((card) => {
     const index = Number(card.dataset.index);
     const activar = () => seleccionarPunto(index);
-    card.addEventListener('click', activar);
+    card.addEventListener('click', (e) => {
+      if (e.target.closest('a')) return;
+      activar();
+    });
     card.addEventListener('keydown', (e) => {
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
@@ -188,73 +321,61 @@ function renderizarLista(puntos) {
   });
 }
 
-function renderizarPuntos(puntos) {
-  puntosActuales = puntos || [];
-  renderizarMarcadores(puntosActuales);
+async function renderizarPuntos(puntos) {
+  puntosActuales = enriquecerPuntos(puntos);
   renderizarLista(puntosActuales);
+  await initMapaGoogle(puntosActuales);
   if (puntosActuales.length > 0) {
     seleccionarPunto(0);
   }
-}
-
-function aplicarZoomMapa() {
-  if (!puntosMapaImg) return;
-  puntosMapaImg.style.transform = `scale(${escalaMapa})`;
 }
 
 function initZoomMapa() {
   if (!btnZoomIn || !btnZoomOut) return;
 
   btnZoomIn.addEventListener('click', () => {
-    escalaMapa = Math.min(2, escalaMapa + 0.15);
-    aplicarZoomMapa();
+    if (!googleMap) return;
+    googleMap.setZoom(googleMap.getZoom() + 1);
   });
 
   btnZoomOut.addEventListener('click', () => {
-    escalaMapa = Math.max(1, escalaMapa - 0.15);
-    aplicarZoomMapa();
+    if (!googleMap) return;
+    googleMap.setZoom(googleMap.getZoom() - 1);
   });
-}
-
-function initImagenMapa() {
-  if (!puntosMapaImg) return;
-
-  puntosMapaImg.addEventListener(
-    'error',
-    () => {
-      if (!puntosMapaImg.src.includes('img/stitch/mapa-suministro')) {
-        puntosMapaImg.src = 'img/stitch/mapa-suministro.jpg';
-      }
-    },
-    { once: true }
-  );
-
-  const imgStitch = new Image();
-  imgStitch.onload = () => {
-    puntosMapaImg.src = MAPA_PUNTOS_URL;
-  };
-  imgStitch.onerror = () => {
-    puntosMapaImg.src = 'img/stitch/mapa-suministro.jpg';
-  };
-  imgStitch.src = MAPA_PUNTOS_URL;
 }
 
 async function initPuntosVenta() {
   if (!puntosLista) return;
 
-  initImagenMapa();
   initZoomMapa();
   mostrarSkeletonPuntos(3);
 
   const { data, error } = await cargarPuntosVenta();
 
   if (error) {
+    const sinColumnas =
+      error.message?.includes('lat') ||
+      error.message?.includes('lng') ||
+      error.code === '42703';
+
+    if (sinColumnas) {
+      const { data: dataBasica, error: err2 } = await getSupabase()
+        .from('puntos_venta')
+        .select('id, nombre, direccion, horario, precio, activo')
+        .order('nombre', { ascending: true });
+
+      if (!err2 && dataBasica) {
+        await renderizarPuntos(dataBasica);
+        return;
+      }
+    }
+
     puntosLista.innerHTML = `<p class="puntos-error glass-card">Error al cargar puntos: ${escaparHtml(error.message)}. Verifica tu conexión a Supabase.</p>`;
     if (puntosMapaLeyenda) puntosMapaLeyenda.textContent = 'Mapa no disponible';
     return;
   }
 
-  renderizarPuntos(data);
+  await renderizarPuntos(data);
 }
 
 document.addEventListener('DOMContentLoaded', initPuntosVenta);

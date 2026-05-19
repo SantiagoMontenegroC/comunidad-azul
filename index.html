@@ -171,16 +171,10 @@
       </header>
 
       <div class="puntos-layout fade-in">
-        <div class="puntos-mapa glass-card" id="puntos-mapa" aria-label="Mapa interactivo del barrio">
+        <div class="puntos-mapa glass-card" id="puntos-mapa" aria-label="Mapa de Google con tanques de agua">
           <div class="puntos-mapa__viewport" id="puntos-mapa-viewport">
-            <img
-              class="puntos-mapa__img"
-              id="puntos-mapa-img"
-              src="img/stitch/mapa-suministro.jpg"
-              alt="Mapa del Barrio Divino Niño 1 con puntos de agua"
-              loading="lazy"
-            />
-            <div class="puntos-mapa__markers" id="puntos-mapa-markers"></div>
+            <div id="puntos-mapa-canvas" class="puntos-mapa__canvas" role="img" aria-label="Mapa de Google Maps"></div>
+            <p id="puntos-mapa-aviso" class="puntos-mapa__aviso" hidden></p>
           </div>
           <div class="puntos-mapa__leyenda glass-card">
             <span class="material-symbols-outlined" aria-hidden="true">water_drop</span>
@@ -386,6 +380,7 @@
   <!-- Supabase JS (CDN) -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
   <script src="js/supabase.js"></script>
+  <script src="js/maps-config.js"></script>
   <script src="js/main.js"></script>
   <script src="js/puntos-venta.js"></script>
   <script src="js/reportes.js"></script>
