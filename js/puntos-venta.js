@@ -1,11 +1,11 @@
 /**
- * puntos-venta.js — Google Maps + lista desde Supabase
+ * puntos-venta.js — Mapa OpenStreetMap (Leaflet) + lista desde Supabase
+ * Gratis: sin API key ni tarjeta.
  */
 
 const puntosLista = document.getElementById('puntos-lista');
 const mapaCanvas = document.getElementById('puntos-mapa-canvas');
 const puntosMapaLeyenda = document.getElementById('puntos-mapa-leyenda');
-const mapaAviso = document.getElementById('puntos-mapa-aviso');
 const btnZoomIn = document.getElementById('mapa-zoom-in');
 const btnZoomOut = document.getElementById('mapa-zoom-out');
 
@@ -22,14 +22,13 @@ const TANQUES_COORDENADAS_ORDEN = [
   { lat: 11.253092870380645, lng: -74.17160776508045 },
 ];
 
-const MAPA_CENTRO = { lat: 11.253335, lng: -74.170382 };
+const MAPA_CENTRO = [11.253335, -74.170382];
 const MAPA_ZOOM_INICIAL = 17;
 
 let puntosActuales = [];
 let indiceSeleccionado = -1;
-let googleMap = null;
-let googleMarcadores = [];
-let googleInfoVentana = null;
+let mapaLeaflet = null;
+let marcadoresLeaflet = [];
 let mapaListo = false;
 
 function escaparHtml(texto) {
@@ -65,156 +64,93 @@ function porcentajeDisponibilidad(punto, index) {
   return Math.min(95, base);
 }
 
-function obtenerApiKeyGoogle() {
-  const key = typeof MAPS_CONFIG !== 'undefined' ? MAPS_CONFIG.apiKey : '';
-  return (key || '').trim();
+function enlaceUbicacion(punto) {
+  return `https://www.openstreetmap.org/?mlat=${punto.lat}&mlon=${punto.lng}#map=18/${punto.lat}/${punto.lng}`;
 }
 
-function mostrarAvisoMapa(mensaje) {
-  if (!mapaAviso) return;
-  mapaAviso.hidden = false;
-  mapaAviso.textContent = mensaje;
-}
-
-function cargarScriptGoogleMaps(apiKey) {
-  return new Promise((resolve, reject) => {
-    if (window.google?.maps) {
-      resolve();
-      return;
-    }
-    const existente = document.querySelector('script[data-google-maps]');
-    if (existente) {
-      existente.addEventListener('load', () => resolve());
-      existente.addEventListener('error', () => reject(new Error('No se pudo cargar Google Maps')));
-      return;
-    }
-    const script = document.createElement('script');
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${encodeURIComponent(apiKey)}&v=weekly&language=es`;
-    script.async = true;
-    script.defer = true;
-    script.dataset.googleMaps = '1';
-    script.onload = () => resolve();
-    script.onerror = () => reject(new Error('Error al cargar la API de Google Maps'));
-    document.head.appendChild(script);
+function crearIconoMarcador(activo, seleccionado) {
+  const color = activo ? '#00897B' : '#c62828';
+  const tam = seleccionado ? 42 : 36;
+  return L.divIcon({
+    className: 'punto-marker-leaflet',
+    html: `
+      <span class="punto-marker-leaflet__pin${seleccionado ? ' punto-marker-leaflet__pin--selected' : ''}"
+        style="width:${tam}px;height:${tam}px;background:${color}">
+        <span class="material-symbols-outlined material-symbols-outlined--fill">water_drop</span>
+      </span>
+    `,
+    iconSize: [tam, tam],
+    iconAnchor: [tam / 2, tam],
+    popupAnchor: [0, -tam],
   });
 }
 
-function iconoMarcadorGoogle(activo, seleccionado) {
-  return {
-    path: google.maps.SymbolPath.CIRCLE,
-    scale: seleccionado ? 14 : 11,
-    fillColor: activo ? '#00897B' : '#c62828',
-    fillOpacity: 1,
-    strokeColor: '#ffffff',
-    strokeWeight: seleccionado ? 3 : 2,
-  };
-}
+function initMapaLeaflet(puntos) {
+  if (!mapaCanvas || typeof L === 'undefined') return false;
 
-function initGoogleMap(puntos) {
-  if (!mapaCanvas || !window.google?.maps) return false;
+  if (mapaLeaflet) {
+    mapaLeaflet.remove();
+    mapaLeaflet = null;
+    marcadoresLeaflet = [];
+  }
 
-  googleMap = new google.maps.Map(mapaCanvas, {
-    center: MAPA_CENTRO,
-    zoom: MAPA_ZOOM_INICIAL,
-    mapTypeControl: false,
-    streetViewControl: false,
-    fullscreenControl: true,
+  mapaLeaflet = L.map(mapaCanvas, {
+    scrollWheelZoom: true,
     zoomControl: false,
-    styles: [
-      {
-        featureType: 'poi',
-        elementType: 'labels',
-        stylers: [{ visibility: 'off' }],
-      },
-    ],
-  });
+  }).setView(MAPA_CENTRO, MAPA_ZOOM_INICIAL);
 
-  googleInfoVentana = new google.maps.InfoWindow();
-  googleMarcadores = puntos.map((punto, index) => {
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution:
+      '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a>',
+  }).addTo(mapaLeaflet);
+
+  const bounds = L.latLngBounds();
+
+  marcadoresLeaflet = puntos.map((punto, index) => {
     const activo = estaActivo(punto);
-    const marker = new google.maps.Marker({
-      position: { lat: punto.lat, lng: punto.lng },
-      map: googleMap,
+    const marker = L.marker([punto.lat, punto.lng], {
+      icon: crearIconoMarcador(activo, index === 0),
       title: punto.nombre,
-      icon: iconoMarcadorGoogle(activo, index === 0),
-      zIndex: index === 0 ? 10 : 1,
-    });
+    }).addTo(mapaLeaflet);
 
-    marker.addListener('click', () => {
-      seleccionarPunto(index);
-    });
+    const estado = activo ? 'Abierto' : 'Cerrado';
+    marker.bindPopup(
+      `<div class="puntos-mapa__info"><strong>${escaparHtml(punto.nombre)}</strong><br>${estado}<br><small>${escaparHtml(punto.direccion)}</small></div>`
+    );
 
+    marker.on('click', () => seleccionarPunto(index));
+    bounds.extend([punto.lat, punto.lng]);
     return marker;
   });
 
-  const bounds = new google.maps.LatLngBounds();
-  puntos.forEach((p) => bounds.extend({ lat: p.lat, lng: p.lng }));
-  googleMap.fitBounds(bounds, { top: 48, right: 48, bottom: 48, left: 48 });
+  if (puntos.length > 1) {
+    mapaLeaflet.fitBounds(bounds, { padding: [40, 40], maxZoom: 18 });
+  }
 
-  google.maps.event.addListenerOnce(googleMap, 'idle', () => {
-    if (googleMap.getZoom() > 18) googleMap.setZoom(18);
-  });
-
+  setTimeout(() => mapaLeaflet.invalidateSize(), 100);
   mapaListo = true;
   return true;
 }
 
-async function initMapaGoogle(puntos) {
-  const apiKey = obtenerApiKeyGoogle();
-  if (!apiKey) {
-    mostrarAvisoMapa(
-      'Para ver Google Maps, agrega tu API key en js/maps-config.js (Maps JavaScript API).'
-    );
-    mostrarEnlacesGoogleMaps(puntos);
-    return false;
-  }
+function actualizarMarcadoresLeaflet() {
+  if (!mapaLeaflet || !marcadoresLeaflet.length) return;
 
-  try {
-    await cargarScriptGoogleMaps(apiKey);
-    return initGoogleMap(puntos);
-  } catch (err) {
-    console.error(err);
-    mostrarAvisoMapa(
-      'No se pudo cargar Google Maps. Revisa la API key y que esté habilitada “Maps JavaScript API”.'
-    );
-    mostrarEnlacesGoogleMaps(puntos);
-    return false;
-  }
-}
-
-function mostrarEnlacesGoogleMaps(puntos) {
-  if (!mapaCanvas) return;
-  const links = puntos
-    .map(
-      (p) =>
-        `<li><a href="https://www.google.com/maps?q=${p.lat},${p.lng}" target="_blank" rel="noopener noreferrer">${escaparHtml(p.nombre)}</a></li>`
-    )
-    .join('');
-  mapaCanvas.innerHTML = `<div class="puntos-mapa__fallback"><p>Ubicaciones de tanques:</p><ul>${links}</ul></div>`;
-}
-
-function actualizarMarcadoresGoogle() {
-  if (!googleMap || !googleMarcadores.length) return;
-
-  googleMarcadores.forEach((marker, i) => {
+  marcadoresLeaflet.forEach((marker, i) => {
     const activo = estaActivo(puntosActuales[i]);
-    marker.setIcon(iconoMarcadorGoogle(activo, i === indiceSeleccionado));
-    marker.setZIndex(i === indiceSeleccionado ? 20 : 1);
+    marker.setIcon(crearIconoMarcador(activo, i === indiceSeleccionado));
+    if (i === indiceSeleccionado) {
+      marker.setZIndexOffset(1000);
+    } else {
+      marker.setZIndexOffset(0);
+    }
   });
 
   const punto = puntosActuales[indiceSeleccionado];
   if (!punto) return;
 
-  googleMap.panTo({ lat: punto.lat, lng: punto.lng });
-  if (googleMap.getZoom() < 17) googleMap.setZoom(17);
-
-  if (googleInfoVentana) {
-    const estado = estaActivo(punto) ? 'Abierto' : 'Cerrado';
-    googleInfoVentana.setContent(
-      `<div class="puntos-mapa__info"><strong>${escaparHtml(punto.nombre)}</strong><br>${estado}<br><small>${escaparHtml(punto.direccion)}</small></div>`
-    );
-    googleInfoVentana.open(googleMap, googleMarcadores[indiceSeleccionado]);
-  }
+  mapaLeaflet.setView([punto.lat, punto.lng], Math.max(mapaLeaflet.getZoom(), 17), { animate: true });
+  marcadoresLeaflet[indiceSeleccionado].openPopup();
 }
 
 function mostrarSkeletonPuntos(cantidad = 3) {
@@ -237,7 +173,7 @@ function seleccionarPunto(index) {
   });
 
   if (mapaListo) {
-    actualizarMarcadoresGoogle();
+    actualizarMarcadoresLeaflet();
   }
 }
 
@@ -255,7 +191,7 @@ function renderizarLista(puntos) {
 
   const activos = puntos.filter((p) => estaActivo(p)).length;
   if (puntosMapaLeyenda) {
-    puntosMapaLeyenda.textContent = `${activos} de ${puntos.length} tanques activos · Google Maps`;
+    puntosMapaLeyenda.textContent = `${activos} de ${puntos.length} tanques activos · mapa gratuito`;
   }
 
   puntosLista.innerHTML = puntos
@@ -287,7 +223,7 @@ function renderizarLista(puntos) {
         </div>
         <div class="punto-card__row punto-card__row--coords">
           <span class="material-symbols-outlined">map</span>
-          <a href="https://www.google.com/maps?q=${p.lat},${p.lng}" target="_blank" rel="noopener noreferrer">Ver en Google Maps</a>
+          <a href="${enlaceUbicacion(p)}" target="_blank" rel="noopener noreferrer">Ver ubicación en el mapa</a>
         </div>
       </div>
       <div class="punto-card__barra">
@@ -321,10 +257,10 @@ function renderizarLista(puntos) {
   });
 }
 
-async function renderizarPuntos(puntos) {
+function renderizarPuntos(puntos) {
   puntosActuales = enriquecerPuntos(puntos);
   renderizarLista(puntosActuales);
-  await initMapaGoogle(puntosActuales);
+  initMapaLeaflet(puntosActuales);
   if (puntosActuales.length > 0) {
     seleccionarPunto(0);
   }
@@ -334,13 +270,13 @@ function initZoomMapa() {
   if (!btnZoomIn || !btnZoomOut) return;
 
   btnZoomIn.addEventListener('click', () => {
-    if (!googleMap) return;
-    googleMap.setZoom(googleMap.getZoom() + 1);
+    if (!mapaLeaflet) return;
+    mapaLeaflet.zoomIn();
   });
 
   btnZoomOut.addEventListener('click', () => {
-    if (!googleMap) return;
-    googleMap.setZoom(googleMap.getZoom() - 1);
+    if (!mapaLeaflet) return;
+    mapaLeaflet.zoomOut();
   });
 }
 
@@ -365,7 +301,7 @@ async function initPuntosVenta() {
         .order('nombre', { ascending: true });
 
       if (!err2 && dataBasica) {
-        await renderizarPuntos(dataBasica);
+        renderizarPuntos(dataBasica);
         return;
       }
     }
@@ -375,7 +311,7 @@ async function initPuntosVenta() {
     return;
   }
 
-  await renderizarPuntos(data);
+  renderizarPuntos(data);
 }
 
 document.addEventListener('DOMContentLoaded', initPuntosVenta);

@@ -58,43 +58,49 @@
   height: 100%;
   min-height: 280px;
   background: #e8eef5;
+  z-index: 1;
 }
 
-.puntos-mapa__aviso {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  left: 12px;
-  z-index: 5;
-  margin: 0;
-  padding: 10px 12px;
-  border-radius: 10px;
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: #5d4037;
-  background: #fff8e1;
-  border: 1px solid #ffe082;
-  box-shadow: 0 4px 16px var(--sombra);
+.puntos-mapa__canvas.leaflet-container {
+  font-family: 'Nunito', sans-serif;
 }
 
-.puntos-mapa__fallback {
+.punto-marker-leaflet {
+  background: none;
+  border: none;
+}
+
+.punto-marker-leaflet__pin {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
   justify-content: center;
-  height: 100%;
-  padding: 24px;
-  color: var(--azul-profundo);
+  border-radius: 50%;
+  color: var(--blanco);
+  box-shadow: 0 6px 20px rgba(0, 22, 60, 0.35);
+  border: 2px solid #fff;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.puntos-mapa__fallback ul {
-  margin: 12px 0 0;
-  padding-left: 1.25rem;
+.punto-marker-leaflet__pin .material-symbols-outlined {
+  font-size: 20px;
 }
 
-.puntos-mapa__fallback a {
-  color: var(--azul-medio);
-  font-weight: 600;
+.punto-marker-leaflet__pin--selected {
+  transform: scale(1.12);
+  box-shadow: 0 8px 28px rgba(0, 150, 136, 0.55);
+  outline: 3px solid rgba(255, 255, 255, 0.95);
+  outline-offset: 2px;
+}
+
+.puntos-mapa .leaflet-control-attribution {
+  font-size: 0.65rem;
+  background: rgba(255, 255, 255, 0.88);
+  border-radius: 6px 0 0 0;
+}
+
+.puntos-mapa .leaflet-popup-content-wrapper {
+  border-radius: 12px;
+  box-shadow: 0 8px 24px var(--sombra);
 }
 
 .puntos-mapa__info {
@@ -119,7 +125,7 @@
   position: absolute;
   top: 16px;
   left: 16px;
-  z-index: 4;
+  z-index: 1000;
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -138,9 +144,9 @@
 
 .puntos-mapa__zoom {
   position: absolute;
-  bottom: 20px;
-  right: 20px;
-  z-index: 4;
+  bottom: 28px;
+  right: 12px;
+  z-index: 1000;
   display: flex;
   flex-direction: column;
   gap: 8px;
