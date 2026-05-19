@@ -90,15 +90,24 @@
   position: relative;
   background: var(--azul-profundo);
   color: var(--blanco);
-  padding-top: 80px;
+  padding-top: 3.5rem;
+  margin-top: -1px;
 }
 
-.site-footer .waves-top {
+.footer__wave {
+  position: absolute;
   top: 0;
+  left: 0;
+  width: 100%;
+  line-height: 0;
+  transform: translateY(-99.5%);
+  pointer-events: none;
 }
 
-.site-footer .waves-top .shape-fill {
-  fill: var(--azul-claro);
+.footer__wave svg {
+  display: block;
+  width: 100%;
+  height: 48px;
 }
 
 .footer__grid {
