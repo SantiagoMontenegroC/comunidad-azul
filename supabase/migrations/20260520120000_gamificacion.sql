@@ -1,10 +1,13 @@
--- Gamificación — preferir: .\aplicar-supabase.ps1 (tras npx supabase login)
--- O copiar supabase/migrations/20260520120000_gamificacion.sql en SQL Editor
+-- Gamificación: reconocimiento manual de aportes en reportes
 ALTER TABLE reportes ADD COLUMN IF NOT EXISTS destacado BOOLEAN DEFAULT false;
 ALTER TABLE reportes ADD COLUMN IF NOT EXISTS reconocimiento TEXT;
 ALTER TABLE reportes ADD COLUMN IF NOT EXISTS motivo_destacado TEXT;
 
--- Destacar reportes existentes (ajusta los id si hace falta)
+-- Permite al administrador actualizar destacados desde Table Editor o API (demo universitaria)
+DROP POLICY IF EXISTS "Actualizar gamificacion reportes" ON reportes;
+CREATE POLICY "Actualizar gamificacion reportes" ON reportes
+  FOR UPDATE USING (true) WITH CHECK (true);
+
 UPDATE reportes
 SET
   destacado = true,
