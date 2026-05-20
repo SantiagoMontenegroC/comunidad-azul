@@ -49,9 +49,8 @@ async function manejarEnvioContacto(e) {
 }
 
 function initContacto() {
-  if (formContacto) {
+  if (formContacto && !formContacto.dataset.bound) {
+    formContacto.dataset.bound = '1';
     formContacto.addEventListener('submit', manejarEnvioContacto);
   }
 }
-
-document.addEventListener('DOMContentLoaded', initContacto);

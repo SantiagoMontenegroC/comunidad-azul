@@ -61,7 +61,14 @@ function claseReconocimiento(reconocimiento) {
 }
 
 function esDestacado(reporte) {
-  return reporte.destacado === true || reporte.destacado === 'true';
+  return reporte.destacado === true || reporte.destacado === 'true' || reporte.destacado === 1;
+}
+
+function textoReconocimiento(reporte) {
+  if (reporte.reconocimiento && String(reporte.reconocimiento).trim()) {
+    return String(reporte.reconocimiento).trim();
+  }
+  return esDestacado(reporte) ? 'Contribución útil' : '';
 }
 
 function escaparHtml(texto) {
@@ -131,8 +138,9 @@ function renderizarReportes(reportes) {
   listaReportes.innerHTML = reportes
     .map((r) => {
       const destacado = esDestacado(r);
+      const reconocimiento = textoReconocimiento(r);
       const badgeReconocimiento =
-        destacado && r.reconocimiento ? htmlBadgeReconocimiento(r.reconocimiento) : '';
+        destacado && reconocimiento ? htmlBadgeReconocimiento(reconocimiento) : '';
 
       return `
     <article class="reporte-item fade-in visible${destacado ? ' reporte-item--destacado' : ''}">
@@ -256,15 +264,19 @@ async function refrescarSeccionReportes() {
   }
 }
 
-/** Inicialización de reportes */
-function initReportes() {
-  if (formReporte) {
+/** Inicialización de reportes (llamada desde main.js tras initSupabase) */
+async function initReportes() {
+  if (typeof asegurarSupabase === 'function') asegurarSupabase();
+
+  if (formReporte && !formReporte.dataset.bound) {
+    formReporte.dataset.bound = '1';
     formReporte.addEventListener('submit', manejarEnvioReporte);
   }
 
-  refrescarSeccionReportes();
+  await refrescarSeccionReportes();
 
-  suscribirReportesRealtime(refrescarSeccionReportes);
+  if (!window.__reportesRealtimeOk) {
+    suscribirReportesRealtime(refrescarSeccionReportes);
+    window.__reportesRealtimeOk = true;
+  }
 }
-
-document.addEventListener('DOMContentLoaded', initReportes);

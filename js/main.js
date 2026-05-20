@@ -133,12 +133,23 @@ async function actualizarEstadisticasHero() {
   }
 }
 
+/** Garantiza cliente Supabase antes de cualquier módulo de datos */
+function asegurarSupabase() {
+  return getSupabase() || initSupabase();
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
-  const cliente = initSupabase();
+  const cliente = asegurarSupabase();
   actualizarIndicadorBD(!!cliente);
+
   initNavbar();
   initFadeIn();
   initHeroButtons();
+
+  if (typeof initContacto === 'function') initContacto();
+  if (typeof initPuntosVenta === 'function') await initPuntosVenta();
+  if (typeof initReportes === 'function') await initReportes();
+
   if (cliente) {
     await actualizarEstadisticasHero();
   }

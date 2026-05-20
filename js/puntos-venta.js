@@ -302,6 +302,8 @@ function initZoomMapa() {
 async function initPuntosVenta() {
   if (!puntosLista) return;
 
+  if (typeof asegurarSupabase === 'function') asegurarSupabase();
+
   initZoomMapa();
   mostrarSkeletonPuntos(3);
 
@@ -316,5 +318,4 @@ async function initPuntosVenta() {
   renderizarPuntos(data);
 }
 
-document.addEventListener('DOMContentLoaded', initPuntosVenta);
 window.addEventListener('resize', sincronizarAlturaMapa);
