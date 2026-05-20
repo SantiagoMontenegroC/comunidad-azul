@@ -1,4 +1,4 @@
-# Sitio estático — sin build
+# Sitio estático — sin build (deploy desde main en GitHub)
 [build]
   publish = "."
 
