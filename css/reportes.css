@@ -6,6 +6,157 @@
   background: var(--blanco);
 }
 
+/* —— Gamificación: aportes destacados —— */
+.aportes-destacados {
+  padding: 28px 32px;
+  margin-bottom: 32px;
+  border: 1px solid rgba(10, 42, 94, 0.08);
+}
+
+.aportes-destacados__title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.35rem;
+  margin-bottom: 10px;
+  color: var(--azul-profundo);
+}
+
+.aportes-destacados__title .material-symbols-outlined {
+  font-size: 2rem;
+  color: #c9a227;
+}
+
+.aportes-destacados__intro {
+  color: var(--texto-suave);
+  max-width: 720px;
+  line-height: 1.55;
+  margin-bottom: 20px;
+}
+
+.aportes-destacados__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
+}
+
+.aportes-destacados__vacio {
+  text-align: center;
+  padding: 24px 16px;
+  color: var(--texto-suave);
+  grid-column: 1 / -1;
+}
+
+.aportes-destacados__nota {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-top: 18px;
+  font-size: 0.85rem;
+  color: #747780;
+}
+
+.aportes-destacados__nota .material-symbols-outlined {
+  font-size: 1.1rem;
+  color: var(--azul-medio);
+  flex-shrink: 0;
+}
+
+.aportes-destacados--ejemplo .aportes-destacados__nota::after {
+  content: ' Ejemplos ilustrativos hasta que la junta destaque reportes reales.';
+}
+
+.aporte-card {
+  position: relative;
+  background: linear-gradient(145deg, #fffef8 0%, #fff 55%);
+  border: 1px solid rgba(201, 162, 39, 0.35);
+  border-radius: var(--radius-lg);
+  padding: 20px 18px 18px;
+  box-shadow: 0 4px 16px rgba(10, 42, 94, 0.06);
+}
+
+.aporte-card--ejemplo {
+  border-style: dashed;
+}
+
+.aporte-card__icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #fff8e1, #ffe082);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+
+.aporte-card__icon .material-symbols-outlined {
+  font-size: 1.6rem;
+  color: #b8860b;
+}
+
+.aporte-card__nombre {
+  font-family: 'Raleway', sans-serif;
+  font-size: 1.05rem;
+  margin: 8px 0 4px;
+  color: var(--azul-profundo);
+}
+
+.aporte-card__sector,
+.aporte-card__tipo {
+  font-size: 0.8rem;
+  color: var(--azul-medio);
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.aporte-card__motivo {
+  font-size: 0.9rem;
+  color: var(--texto-suave);
+  line-height: 1.5;
+  margin-top: 8px;
+}
+
+.badge-reconocimiento {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.badge-reconocimiento .material-symbols-outlined {
+  font-size: 1rem;
+}
+
+.badge-reconocimiento--reportero {
+  background: linear-gradient(90deg, #fff3cd, #ffe69c);
+  color: #7a5c00;
+  border: 1px solid rgba(201, 162, 39, 0.5);
+}
+
+.badge-reconocimiento--util {
+  background: rgba(30, 136, 229, 0.12);
+  color: var(--azul-profundo);
+  border: 1px solid rgba(30, 136, 229, 0.25);
+}
+
+.reporte-item__badges {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+.reporte-item--destacado {
+  border-color: rgba(201, 162, 39, 0.45);
+  background: linear-gradient(135deg, rgba(255, 248, 225, 0.65), rgba(255, 255, 255, 0.5));
+}
+
 .reportes-layout {
   display: grid;
   grid-template-columns: 5fr 7fr;

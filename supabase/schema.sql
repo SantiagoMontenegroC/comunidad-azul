@@ -24,6 +24,9 @@ CREATE TABLE reportes (
   tipo TEXT NOT NULL,
   descripcion TEXT NOT NULL,
   estado TEXT DEFAULT 'Pendiente',
+  destacado BOOLEAN DEFAULT false,
+  reconocimiento TEXT,
+  motivo_destacado TEXT,
   created_at TIMESTAMP DEFAULT NOW()
 );
 
@@ -74,6 +77,17 @@ CREATE POLICY "Insertar reportes" ON reportes
 -- Cualquiera puede enviar contacto
 CREATE POLICY "Insertar contactos" ON contactos
   FOR INSERT WITH CHECK (true);
+
+-- Gamificación (reconocimiento manual en Table Editor):
+-- destacado = true, reconocimiento = 'Reportero destacado' | 'Contribución útil'
+-- UPDATE reportes SET destacado = true, reconocimiento = 'Reportero destacado',
+--   motivo_destacado = 'Reporte oportuno que ayudó a coordinar el suministro.'
+-- WHERE id = 1;
+
+-- Si la tabla reportes ya existía sin gamificación:
+-- ALTER TABLE reportes ADD COLUMN IF NOT EXISTS destacado BOOLEAN DEFAULT false;
+-- ALTER TABLE reportes ADD COLUMN IF NOT EXISTS reconocimiento TEXT;
+-- ALTER TABLE reportes ADD COLUMN IF NOT EXISTS motivo_destacado TEXT;
 
 -- ============================================
 -- Realtime: habilitar en Dashboard

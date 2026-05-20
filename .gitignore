@@ -21,6 +21,9 @@ npm-debug.log*
 # Documentación, capturas y scripts auxiliares (solo en tu PC)
 docs/
 scripts/
+AGENTS.md
+*.docx
+~$*.docx
 
 # Claves (nunca al repo público)
 .env

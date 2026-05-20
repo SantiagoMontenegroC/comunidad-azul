@@ -108,11 +108,61 @@ async function cargarReportes() {
     return { data: null, error: { message: 'Supabase no configurado' } };
   }
 
+  const completo = await client
+    .from('reportes')
+    .select(
+      'id, nombre, sector, tipo, descripcion, estado, created_at, destacado, reconocimiento, motivo_destacado'
+    )
+    .order('created_at', { ascending: false })
+    .limit(10);
+
+  if (!esErrorColumnasGamificacion(completo.error)) {
+    return completo;
+  }
+
   return client
     .from('reportes')
     .select('id, nombre, sector, tipo, descripcion, estado, created_at')
     .order('created_at', { ascending: false })
     .limit(10);
+}
+
+/** Error por columnas de gamificación aún no migradas */
+function esErrorColumnasGamificacion(error) {
+  if (!error) return false;
+  const msg = (error.message || '').toLowerCase();
+  return (
+    error.code === '42703' ||
+    error.code === 'PGRST204' ||
+    msg.includes('destacado') ||
+    msg.includes('reconocimiento') ||
+    msg.includes('motivo_destacado')
+  );
+}
+
+/**
+ * SELECT — Aportes destacados (gestión manual en Supabase)
+ */
+async function cargarAportesDestacados() {
+  const client = getSupabase();
+  if (!client) {
+    return { data: null, error: { message: 'Supabase no configurado' } };
+  }
+
+  const result = await client
+    .from('reportes')
+    .select(
+      'id, nombre, sector, tipo, descripcion, reconocimiento, motivo_destacado, created_at'
+    )
+    .eq('destacado', true)
+    .order('created_at', { ascending: false })
+    .limit(6);
+
+  if (!esErrorColumnasGamificacion(result.error)) {
+    return result;
+  }
+
+  return { data: [], error: null };
 }
 
 /**
