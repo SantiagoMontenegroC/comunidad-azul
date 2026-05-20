@@ -3,16 +3,30 @@
 Thumbs.db
 desktop.ini
 
-# Editor
+# Editor / Cursor (config local, no subir)
 .vscode/
 .idea/
+.cursor/
 *.swp
 
 # Logs
 *.log
 
-# Node (capturas blog / MCP Playwright)
+# Node / herramientas locales (capturas, MCP)
 node_modules/
+package-lock.json
+package.json
+npm-debug.log*
 
-# Opcional: no subir claves si usas variables de entorno en el futuro
-# .env
+# Documentación y capturas (solo en tu PC / Word)
+docs/
+scripts/capturar-blog.*
+
+# Claves (nunca al repo público)
+.env
+.env.*
+*.pem
+
+# Temporales
+*.tmp
+.cache/
