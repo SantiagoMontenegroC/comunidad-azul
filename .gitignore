@@ -11,5 +11,8 @@ desktop.ini
 # Logs
 *.log
 
+# Node (capturas blog / MCP Playwright)
+node_modules/
+
 # Opcional: no subir claves si usas variables de entorno en el futuro
 # .env

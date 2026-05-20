@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "playwright": {
+      "command": "C:\\Users\\Santiago Montenegro\\AppData\\Local\\nodejs\\npx.cmd",
+      "args": [
+        "-y",
+        "@playwright/mcp@latest",
+        "--output-dir",
+        "docs/blog-capturas/mcp"
+      ]
+    }
+  }
+}
