@@ -12,15 +12,15 @@ desktop.ini
 # Logs
 *.log
 
-# Node / herramientas locales (capturas, MCP)
+# Node / herramientas locales (no forman parte del sitio)
 node_modules/
 package-lock.json
 package.json
 npm-debug.log*
 
-# Documentación y capturas (solo en tu PC / Word)
+# Documentación, capturas y scripts auxiliares (solo en tu PC)
 docs/
-scripts/capturar-blog.*
+scripts/
 
 # Claves (nunca al repo público)
 .env

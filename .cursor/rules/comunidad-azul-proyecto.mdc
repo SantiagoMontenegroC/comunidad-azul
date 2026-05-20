@@ -14,7 +14,7 @@ alwaysApply: true
 - Stitch es la **referencia visual**; no reinventar UI “premium” ni cambiar tarjetas/olas sin pedirlo.
 - Tipografías del sitio: **Raleway** (títulos) + **Nunito** (cuerpo) — no Montserrat del export Stitch.
 - Iconos: **Material Symbols Outlined**.
-- Imágenes Stitch: `img/stitch/` (`hero-agua.jpg`, `mapa-suministro.jpg`, `accion-comunitaria.jpg`, `panel-transparencia.jpg`). URLs originales en `js/imagenes-stitch.js`.
+- Imágenes Stitch: `img/stitch/` (`hero-agua.jpg`, `mapa-suministro.jpg`, `accion-comunitaria.jpg`, `panel-transparencia.jpg`).
 
 ## Estructura de `index.html`
 
